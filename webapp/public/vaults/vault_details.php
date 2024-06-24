@@ -10,8 +10,8 @@ $database = 'password_manager';
 $conn = new mysqli($hostname, $username, $password, $database);
 
 if ($conn->connect_error) {
-    die ('A fatal error occurred and has been logged.');
-    // die("Connection failed: " . $conn->connect_error);
+    //die ('A fatal error occurred and has been logged.');
+    die("Connection failed: " . $conn->connect_error);
 }
 
 $uploadDir = './uploads/'; // Specify the directory where you want to save the uploaded files
@@ -46,9 +46,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset ($_POST['addUsername']) && is
     $resultAddPassword = $conn->query($queryAddPassword);
 
     if (!$resultAddPassword) {
-
-        die ('A fatal error occurred and has been logged.');
-        // die("Error adding password: " . $conn->error);
+        //die ('A fatal error occurred and has been logged.');
+        die("Error adding password: " . $conn->error);
     }
     // Redirect to the current page after adding the password
     header("Location: {$_SERVER['PHP_SELF']}?vault_id=$vaultId");
@@ -124,9 +123,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset ($_POST['deletePasswordId']) 
     $resultDeletePassword = $conn->query($queryDeletePassword);
 
     if (!$resultDeletePassword) {
-
-        die ('A fatal error occurred and has been logged.');
-        // die("Error deleting password: " . $conn->error);
+        //die ('A fatal error occurred and has been logged.');
+        die("Error deleting password: " . $conn->error);
     }
 
     // Redirect to the current page after deleting the password

@@ -11,9 +11,8 @@ $database = 'password_manager';
 $conn = new mysqli($hostname, $username, $password, $database);
 
 if ($conn->connect_error) {
-
-    die ('A fatal error occurred and has been logged.');
-    //die("Connection failed: " . $conn->connect_error);
+    //die ('A fatal error occurred and has been logged.');
+    die("Connection failed: " . $conn->connect_error);
 }
 
 // Add Vault
@@ -25,9 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset ($_POST['vaultName'])) {
     $result = $conn->query($query);
 
     if (!$result) {
-
-        die ('A fatal error occurred and has been logged.');
-        // die("Error adding vault: " . $conn->error);
+        //die ('A fatal error occurred and has been logged.');
+         die("Error adding vault: " . $conn->error);
     }
 
     // Retrieve the ID of the inserted vault
@@ -51,8 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset ($_POST['vaultName'])) {
 
         if (!$resultInsertPermission) {
 
-            //  die("Error adding permission, Query : " .  $queryInsertPermission . " Error Info : " . $conn->error);
-            die ('A fatal error occurred while adding permission.');
+            die("Error adding permission, Query : " .  $queryInsertPermission . " Error Info : " . $conn->error);
+            //die ('A fatal error occurred while adding permission.');
         }
     } else {
         die ("User with username '$user' not found.");
@@ -72,8 +70,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset ($_POST['editVaultName']) && 
     $result = $conn->query($query);
 
     if (!$result) {
-        die ('A fatal error occurred and has been logged.');
-        // die("Error editing vault: " . $conn->error);
+        //die ('A fatal error occurred and has been logged.');
+        die("Error editing vault: " . $conn->error);
     }
 
     // Redirect to the current page after editing the vault
@@ -90,8 +88,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset ($_POST['deleteVaultId']) && 
     $result = $conn->query($query);
 
     if (!$result) {
-        die ('A fatal error occurred and has been logged.');
-        //die("Error deleting vault: " . $conn->error);
+        //die ('A fatal error occurred and has been logged.');
+        die("Error deleting vault: " . $conn->error);
     }
 
     // Redirect to the current page after deleting the vault

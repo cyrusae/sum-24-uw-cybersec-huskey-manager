@@ -10,8 +10,8 @@ $database = 'password_manager';
 $conn = new mysqli($hostname, $username, $password, $database);
 
 if ($conn->connect_error) {    
-    die('A fatal error occurred and has been logged.');
-    // die("Connection failed: " . $conn->connect_error);
+    //die('A fatal error occurred and has been logged.');
+    die("Connection failed: " . $conn->connect_error);
 }
 
 // Fetch users from the database
@@ -40,8 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     if (!$result) {
                       
-                        die('A fatal error occurred and has been logged.');
-                        // die("Error adding user: " . $conn->error);
+                        //die('A fatal error occurred and has been logged.');
+                        die("Error adding user: " . $conn->error);
                     }
 
                       
@@ -73,8 +73,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     if (!$result) {
                         
-                        die("Error editing user: " . $conn->error);
-                        // die('A fatal error occurred and has been logged.');
+                        //die("Error editing user: " . $conn->error);
+                        die('A fatal error occurred and has been logged.');
                         
                     }
 
@@ -94,8 +94,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     if (!$result) {
                         
-                        die('A fatal error occurred and has been logged.');
-                        // die("Error deleting user: " . $conn->error);
+                        //die('A fatal error occurred and has been logged.');
+                        die("Error deleting user: " . $conn->error);
                     }
                     
 
