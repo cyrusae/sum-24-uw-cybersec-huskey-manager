@@ -27,7 +27,7 @@
     
     <h2>Welcome to the UW HusKey Manager Project!</h2>
 
-    <p>Congratulations on getting your Docker Based web app up and running! This quarter we will be embarking on a journey to build a basic password manaager application. Throughout this course, you will have the opportunity to develop, enhance, and secure an application that plays a crucial role in managing assets effectively.</p>
+    <p>Congratulations on getting your Docker Based web app up and running! This quarter we will be embarking on a journey to build a basic password manager application. Throughout this course, you will have the opportunity to develop, enhance, and secure an application that plays a crucial role in managing assets effectively.</p>
 
     <p>Our focus during this quarter will not only be on developing a password manager system but also on identifying and resolving real-world cybersecurity issues. This hands-on experience will provide you with valuable insights into securing web applications, a skill set in high demand in today's technology landscape.</p>
 
