@@ -1,4 +1,6 @@
-<?php include './components/authenticate.php';?>
+<?php include './components/authenticate.php';
+include './components/loggly-logger.php';
+;?>
 
 <!DOCTYPE html>
 <html lang="en">

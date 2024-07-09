@@ -1,6 +1,8 @@
 <?php
 
 include '../components/authenticate.php';
+include '../components/loggly-logger.php';
+
 
 $hostname = 'backend-mysql-database';
 $username = 'user';

@@ -1,5 +1,8 @@
 <?php
 
+include '../components/loggly-logger.php';
+
+
 // Replace with your database connection details
 $hostname = 'backend-mysql-database';
 $username = 'user';

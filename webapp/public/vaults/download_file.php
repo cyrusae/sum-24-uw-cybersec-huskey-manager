@@ -1,4 +1,6 @@
 <?php
+include '../components/loggly-logger.php';
+
 
 if (isset($_GET['file']) && isset($_GET['vault_id'])) {
     $filePath = $_GET['file'];
