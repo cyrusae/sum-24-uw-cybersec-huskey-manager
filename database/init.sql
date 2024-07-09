@@ -131,6 +131,7 @@ VALUES
 
 --create additional logging database
 --see: https://github.com/ejfrancis/brute-force-block
+/*
 CREATE TABLE IF NOT EXISTS user_failed_logins (
   id int(11) NOT NULL AUTO_INCREMENT,
   user_id bigint(20) NOT NULL,
@@ -139,3 +140,4 @@ CREATE TABLE IF NOT EXISTS user_failed_logins (
   PRIMARY KEY (id),
   FOREIGN KEY (user_id) REFERENCES users (user_id)
 ) ;
+*/
