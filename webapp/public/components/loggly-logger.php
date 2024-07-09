@@ -11,7 +11,7 @@ $logglyToken = $_ENV["LOGGLY_TOKEN"];
 $logger = new Logger('UW Password Manager');
 $logger->pushHandler(new LogglyHandler($logglyToken.'/tag/monolog', Logger::INFO));
 
-$logger->info('Loggly Sending Informational Message');
+//$logger->info('Loggly Sending Informational Message'); //Remove unnecessary 200s 
 
 //TODO: Actually take some kind of bloody advantage of the fact that this is sending JSON instead of barfing up verbose text only
 ?>
