@@ -29,29 +29,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $sql = "SELECT username FROM users WHERE username = '$username' AND password = '$password' AND approved = 1";
+    $sql = "SELECT username FROM users WHERE username = '$username'";
+    $sql_exists = "SELECT username FROM users WHERE username = '$username' AND password = '$password' AND approved = 1";
     $result = $conn->query($sql);
 
     if($result->num_rows > 0) {
-       
+        $result = $conn->query($sql_exists); 
+       if ($result->num_rows < 1) {
+        $warningMessage = 'Login failed with incorrect password for username ' . $username;
+        $logger->warning($warningMessage);
+        $error_message = 'Invalid username or password.';
+       } else {
+        $logger->notice('Login attempted for username ' . $username);
         $userFromDB = $result->fetch_assoc();
 
         //$_COOKIE['authenticated'] = $username;
         setcookie('authenticated', $username, time() + 3600, '/'); 
-        $logger->info('User $username began session'); #   TODO: MAKE IT USE VARIABLES THOUGH.    
+        $logger->info('New session begun for user: ' . $username);   
 
         if ($userFromDB['default_role_id'] == 1)
         {        
-            setcookie('isSiteAdministrator', true, time() + 3600, '/');                
+            setcookie('isSiteAdministrator', true, time() + 3600, '/');
+            $logger->info('Administrator login by ' . $username);                
         }else{
             unset($_COOKIE['isSiteAdministrator']); 
             setcookie('isSiteAdministrator', '', -1, '/'); 
         }
         header("Location: index.php");
-        exit();
+        exit(); }
     } else {
         $error_message = 'Invalid username or password.'; 
-        $logger->warning('Login failed for username: $username') ; //TODO: Make this use the $username variable instead of just inserting '$username'
+        $logger->warning('Login failed for nonexistent user: ' . $username); //TODO: Make this use the $username variable instead of just inserting '$username'
         //TODO: Track number of failed login attempts separately for rejection purposes 
     }
 

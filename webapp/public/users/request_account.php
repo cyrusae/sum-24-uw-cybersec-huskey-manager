@@ -1,5 +1,5 @@
 <?php
-include './components/loggly-logger.php';
+include '../components/loggly-logger.php';
 
 $servername = "backend-mysql-database";
 $username = "user";
@@ -10,8 +10,11 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 unset($error_message);
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+if ($conn->connect_error) {    
+    //die('A fatal error occurred and has been logged.');
+    $errorMessage = "Connection failed: " . $conn->connect_error;
+    $logger->error($errorMessage);
+    die($errorMessage);
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -28,9 +31,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($conn->query($sql) === TRUE) {
         header("Location: /login.php");
+        $logger->notice('New account created for ' . $username);
         exit();
     } else {
         $error_message = 'Error creating account: ' . $conn->error;
+        $logger->error($error_message);
+        die($error_message);
     }
 
     $conn->close();
