@@ -50,7 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     } else {
         $error_message = 'Invalid username or password.'; 
-        $logger->warning('Login failed for username: $username') 
+        $logger->warning('Login failed for username: $username') ; //TODO: Make this use the $username variable instead of just inserting '$username'
+        //TODO: Track number of failed login attempts separately for rejection purposes 
     }
 
     $conn->close();
