@@ -13,7 +13,9 @@ $conn = new mysqli($hostname, $username, $password, $database);
 
 if ($conn->connect_error) {    
     //die('A fatal error occurred and has been logged.');
-    die("Connection failed: " . $conn->connect_error);
+    $errorMessage = "Connection failed: " . $conn->connect_error;
+    $logger->error($errorMessage);
+    die($errorMessage);
 }
 
 // Fetch users from the database
@@ -44,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                       
                         //die('A fatal error occurred and has been logged.');
                         die("Error adding user: " . $conn->error);
+                        
                     }
 
                       
