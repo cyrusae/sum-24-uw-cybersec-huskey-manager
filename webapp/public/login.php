@@ -19,6 +19,7 @@ unset($error_message);
 
 if ($conn->connect_error) {
     $errorMessage = "Connection failed: " . $conn->connect_error;    
+    $logger->error($errorMessage); //Log failed connection
     die($errorMessage);
 }
 
@@ -48,7 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: index.php");
         exit();
     } else {
-        $error_message = 'Invalid username or password.';  
+        $error_message = 'Invalid username or password.'; 
+        $logger->warning('Login failed for username: $username') 
     }
 
     $conn->close();
