@@ -13,7 +13,7 @@ setcookie('isSiteAdministrator', '', -1, '/');
 
 $logger->info('Session ended for user ' .  $username); 
 
-$_SESSION['count'] = 0; //If you successfully logged in and out you get to go home I GUESSS
+unset($_SESSION['count']); //If you successfully logged in and out you get to go home I GUESSS
 // Redirect to the login page
 header('Location: /login.php');
 exit();
