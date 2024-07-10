@@ -18,6 +18,7 @@ if ($conn->connect_error) {
 }
 //TODO log number of account creation attempts (form submissions)
 //TODO throttle account creation 
+//TODO limit account name collisions (need a message reflecting it)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     $username = $_POST['username'];
