@@ -29,7 +29,6 @@ if ($conn->connect_error) {
     $logger->error($errorMessage); //Log failed connection
     die($errorMessage);
 }
-
 //TODO:
 //setcookie()
 
@@ -73,8 +72,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //TODO: Track number of failed login attempts separately for rejection purposes 
     }
 
+
+
     $conn->close();
 }
+
+    //SESSION TELL ME YOUR SECRETS
+    $logger->info('A session exists: ' . time() . ' : ' . var_dump($_SESSION));
+//    echo('PANTS?'); //echo works
+var_dump($_SESSION);
 
 ?>
 
