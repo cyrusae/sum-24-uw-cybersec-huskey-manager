@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $lastName = $_POST['last_name'];
     $email = $_POST['email'];
     
-
+//TODO check collisions, for Christ's sake.
     $sql = "INSERT INTO users (username, first_name, last_name, email, password, default_role_id, approved) 
             VALUES ('$username', '$firstName', '$lastName', '$email', '$password', 3, 0)";
 
