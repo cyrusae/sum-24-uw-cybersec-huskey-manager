@@ -11,7 +11,7 @@ setcookie('authenticated', '', time() - 3600, '/');
 unset($_COOKIE['isSiteAdministrator']); 
 setcookie('isSiteAdministrator', '', -1, '/'); 
 
-$logger->info('Session ended for user $username.'); //TODO FIX THIS
+$logger->info('Session ended for user' .  $username); 
 
 // Redirect to the login page
 header('Location: /login.php');
