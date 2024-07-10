@@ -47,6 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset ($_POST['addUsername']) && is
 
     $queryAddPassword = "INSERT INTO vault_passwords (vault_id, username, website, password, notes, file_path) 
                      VALUES ($vaultId, '$addUsername', '$addWebsite', '$addPassword', '$addNotes', $filePath)";
+                     //TODO Why do the quotes look like that?
 
     $resultAddPassword = $conn->query($queryAddPassword);
 
