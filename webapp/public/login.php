@@ -6,6 +6,7 @@ include './components/loggly-logger.php';
 
 if (!isset($_SESSION['count'])) {
     $_SESSION['count'] = 1;
+    $_SESSION['ip'] = filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
 } else {
     $_SESSION['count']++;
 } //Count session user-side to make credential-stuffing harder (this is a work in progress, don't look at me.)
@@ -76,11 +77,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $conn->close();
 }
-
+    $session_info = var_export($_SESSION, true);
     //SESSION TELL ME YOUR SECRETS
-    $logger->info('A session exists: ' . time() . ' : ' . var_dump($_SESSION));
+    $logger->info('A session exists: ' . time() . ' : ' . $session_info);
 //    echo('PANTS?'); //echo works
-var_dump($_SESSION);
+echo('Contents of var_export this time: ' . $session_info);
+
 
 ?>
 
