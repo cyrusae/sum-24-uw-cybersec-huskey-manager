@@ -16,7 +16,8 @@ if ($conn->connect_error) {
     $logger->error($errorMessage);
     die($errorMessage);
 }
-
+//TODO log number of account creation attempts (form submissions)
+//TODO throttle account creation 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     $username = $_POST['username'];
