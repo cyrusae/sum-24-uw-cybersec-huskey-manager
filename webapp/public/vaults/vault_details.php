@@ -12,9 +12,11 @@ $database = 'password_manager';
 
 $conn = new mysqli($hostname, $username, $password, $database);
 
-if ($conn->connect_error) {
-    //die ('A fatal error occurred and has been logged.');
-    die("Connection failed: " . $conn->connect_error);
+if ($conn->connect_error) {    
+    //die('A fatal error occurred and has been logged.');
+    $errorMessage = "Connection failed: " . $conn->connect_error;
+    $logger->error($errorMessage);
+    die($errorMessage);
 }
 
 $uploadDir = './uploads/'; // Specify the directory where you want to save the uploaded files
@@ -50,7 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset ($_POST['addUsername']) && is
 
     if (!$resultAddPassword) {
         //die ('A fatal error occurred and has been logged.');
-        die("Error adding password: " . $conn->error);
+        $errorMessage = "Error adding password: " . $conn->error;
+        $logger->error($errorMessage);
+        die($errorMessage);
     }
     // Redirect to the current page after adding the password
     header("Location: {$_SERVER['PHP_SELF']}?vault_id=$vaultId");

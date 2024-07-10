@@ -11,11 +11,12 @@ $database = 'password_manager';
 
 $conn = new mysqli($hostname, $username, $password, $database);
 
-if ($conn->connect_error) {
-    //die ('A fatal error occurred and has been logged.');
-    die("Connection failed: " . $conn->connect_error);
+if ($conn->connect_error) {    
+    //die('A fatal error occurred and has been logged.');
+    $errorMessage = "Connection failed: " . $conn->connect_error;
+    $logger->error($errorMessage);
+    die($errorMessage);
 }
-
 // Add Vault
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset ($_POST['vaultName'])) {
     $vaultName = $_POST['vaultName'];
