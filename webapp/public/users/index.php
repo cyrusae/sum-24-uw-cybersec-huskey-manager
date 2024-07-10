@@ -2,6 +2,7 @@
 
 include '../components/authenticate.php';
 include '../components/loggly-logger.php';
+include '../components/console-logger.php';
 
 
 $hostname = 'backend-mysql-database';

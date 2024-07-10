@@ -2,6 +2,9 @@
 
 include './components/loggly-logger.php';
 
+include '../components/console-logger.php';
+
+
 
 // Expire the authentication cookie
 unset($_COOKIE['authenticated']); 

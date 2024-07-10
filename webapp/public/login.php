@@ -3,6 +3,7 @@
 session_start();
 
 include './components/loggly-logger.php';
+include '../components/console-logger.php';
 
 if (!isset($_SESSION['count'])) {
     $_SESSION['count'] = 1;

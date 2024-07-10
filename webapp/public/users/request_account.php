@@ -1,5 +1,6 @@
 <?php
 include '../components/loggly-logger.php';
+include '../components/console-logger.php';
 
 $servername = "backend-mysql-database";
 $username = "user";
