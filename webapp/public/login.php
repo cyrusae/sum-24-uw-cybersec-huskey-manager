@@ -4,6 +4,12 @@ session_start();
 
 include './components/loggly-logger.php';
 
+if (!isset($_SESSION['count'])) {
+    $_SESSION['count'] = 1;
+} else {
+    $_SESSION['count']++;
+} //Count session user-side to make credential-stuffing harder (this is a work in progress, don't look at me.)
+
 $hostname = 'backend-mysql-database';
 $username = 'user';
 $password = 'supersecretpw';
@@ -23,6 +29,9 @@ if ($conn->connect_error) {
     $logger->error($errorMessage); //Log failed connection
     die($errorMessage);
 }
+
+//TODO:
+//setcookie()
 
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -99,6 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
             <div class="mt-3 text-center">
                 <a href="./users/request_account.php" class="btn btn-secondary btn-block">Request an Account</a>
+            <!-- TODO add timeout on requesting accounts so that spamming that isn't viable either --> 
             </div>
         </div>
     </div>
