@@ -2,7 +2,7 @@
 
 include './components/loggly-logger.php';
 
-include '../components/console-logger.php';
+include './components/console-logger.php';
 
 
 
