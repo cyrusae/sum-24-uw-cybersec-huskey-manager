@@ -20,7 +20,8 @@ if ($conn->connect_error) {
 // Add Vault
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset ($_POST['vaultName'])) {
     $vaultName = $_POST['vaultName'];
-    $userId = 1; // Replace with the actual user ID
+    $userId = 1; // Replace with the actual user ID 
+    //TODO: Why are you not actually replacing it with the user ID though 
 
     $query = "INSERT INTO vaults (vault_name) VALUES ('$vaultName')";
     $result = $conn->query($query);
@@ -33,8 +34,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset ($_POST['vaultName'])) {
     // Retrieve the ID of the inserted vault
     $insertedVaultId = $conn->insert_id;
 
-    // We need to fetch the user_id based off the username in order to complete the permission insert, we are going to default to Owner for the role so we can hardcode that without looking it up
 
+    // We need to fetch the user_id based off the username in order to complete the permission insert, we are going to default to Owner for the role so we can hardcode that without looking it up
+///// TODO sproc this
     $user = $_COOKIE['authenticated'];
     $queryFetchUserId = "SELECT user_id FROM users WHERE username = '$user'";
     $resultFetchUserId = $conn->query($queryFetchUserId);
