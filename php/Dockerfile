@@ -1,4 +1,4 @@
-FROM php:7.4.33-fpm-alpine as backend-php-server
+FROM php:8.4-rc-fpm-alpine as backend-php-server
 
 # Useful PHP extension installer image, copy binary into your container
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
