@@ -31,7 +31,11 @@ RUN composer install --prefer-dist --no-dev --no-scripts --no-progress --no-inte
 # copy application files to the working directory
 COPY ./webapp .
 
-RUN chmod 777 /var/www/html/public/vaults/uploads
+RUN chmod 664 /var/www/html/public/vaults/uploads 
+# owner has read and write permissions (no execute) 
+# TODO: do I want to allow execution? Will I have regrets 
+## File group has read and write permissions 
+## Default is read-only 
 
 # run composer dump-autoload --optimize
 RUN composer dump-autoload --optimize
