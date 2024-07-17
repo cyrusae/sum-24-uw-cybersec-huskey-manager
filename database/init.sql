@@ -5,6 +5,9 @@
 -- DROP TABLE IF EXISTS users;
 -- DROP TABLE IF EXISTS roles;
 
+-- TODO: fix duplicate key idx_username 
+-- TODO: fix username duplication vulnerability 
+
 -- Create the database
 CREATE DATABASE IF NOT EXISTS password_manager;
 
