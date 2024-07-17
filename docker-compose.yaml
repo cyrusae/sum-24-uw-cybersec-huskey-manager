@@ -33,6 +33,12 @@ services:
             MYSQL_DATABASE: "${MYSQL_DATABASE}"
         ports:
             - "3306"
+
+    develop:
+        watch:
+            - action: sync
+            path: ./src 
+            target: /var/www/html
             
 volumes:
     mysqldata:
