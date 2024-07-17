@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //SESSION TELL ME YOUR SECRETS
     $logger->info('A session exists: ' . time() . ' : ' . $session_info);
 //    echo('PANTS?'); //echo works
-echo('Contents of var_export this time: ' . $session_info);
+//echo('Contents of var_export this time: ' . $session_info);
 
 
 ?>
