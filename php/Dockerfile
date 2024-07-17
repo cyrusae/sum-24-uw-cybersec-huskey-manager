@@ -31,6 +31,8 @@ RUN composer install --prefer-dist --no-dev --no-scripts --no-progress --no-inte
 # copy application files to the working directory
 COPY ./webapp .
 
+
+
 RUN chmod 664 /var/www/html/public/vaults/uploads 
 # owner has read and write permissions (no execute) 
 # TODO: do I want to allow execution? Will I have regrets 
@@ -40,3 +42,8 @@ RUN chmod 664 /var/www/html/public/vaults/uploads
 
 # run composer dump-autoload --optimize
 RUN composer dump-autoload --optimize
+
+
+#RUN chmod 1770 /var/run/mysqld 
+#attempt to fix error about access to this 
+#okay look if you're going to error out with the claim it doesn't exist what do you want from me!!! 
