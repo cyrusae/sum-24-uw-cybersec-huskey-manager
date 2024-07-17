@@ -35,7 +35,8 @@ RUN chmod 664 /var/www/html/public/vaults/uploads
 # owner has read and write permissions (no execute) 
 # TODO: do I want to allow execution? Will I have regrets 
 ## File group has read and write permissions 
-## Default is read-only 
+## TODO: Should they have write?
+### Default is read-only 
 
 # run composer dump-autoload --optimize
 RUN composer dump-autoload --optimize
