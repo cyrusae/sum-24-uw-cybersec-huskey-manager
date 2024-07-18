@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'];
 
     $sql = "SELECT username FROM users WHERE username = '$username'";
-    $sql_exists = "SELECT username FROM users WHERE username = '$username' AND password = '$password' AND approved = 1";
+    $sql_exists = "SELECT * FROM users WHERE username = '$username' AND password = '$password' AND approved = 1";
     $result = $conn->query($sql);
 
     if($result->num_rows > 0) {
@@ -58,8 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         setcookie('authenticated', $username, time() + 3600, '/'); 
         $logger->info('New session begun for user: ' . $username);   
 
-        if ($userFromDB['default_role_id'] == 1)
-        {        
+        if ($userFromDB['default_role_id'] == 1) {        
             setcookie('isSiteAdministrator', true, time() + 3600, '/');
             $logger->info('Administrator login by ' . $username);                
         }else{
