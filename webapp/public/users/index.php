@@ -1,6 +1,9 @@
 <?php
 
 include '../components/authenticate.php';
+include '../components/loggly-logger.php';
+include '../components/console-logger.php';
+
 
 $hostname = 'backend-mysql-database';
 $username = 'user';
@@ -9,9 +12,13 @@ $database = 'password_manager';
 
 $conn = new mysqli($hostname, $username, $password, $database);
 
+var_dump($_SESSION); //what's up
+
 if ($conn->connect_error) {    
-    die('A fatal error occurred and has been logged.');
-    // die("Connection failed: " . $conn->connect_error);
+    //die('A fatal error occurred and has been logged.');
+    $errorMessage = "Connection failed: " . $conn->connect_error;
+    $logger->error($errorMessage);
+    die($errorMessage);
 }
 
 // Fetch users from the database
@@ -28,11 +35,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             case 'add_user':
                 // Handle adding a user
                 if (isset($_POST['username']) && isset($_POST['first_name']) && isset($_POST['last_name']) && isset($_POST['email']) && isset($_POST['password'])) {
+                    
                     $username = $conn->real_escape_string($_POST['username']);
                     $first_name = $conn->real_escape_string($_POST['first_name']);
                     $last_name = $conn->real_escape_string($_POST['last_name']);
                     $email = $conn->real_escape_string($_POST['email']);
                     $password = $conn->real_escape_string($_POST['password']);
+                    $logger->info('Attempted to add new user with username: ' . $username);
                     
 
                     $query = "INSERT INTO users (username, first_name, last_name, email, password, default_role_id) VALUES ('$username', '$first_name', '$last_name', '$email', '$password', 3, 1)";
@@ -40,8 +49,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     if (!$result) {
                       
-                        die('A fatal error occurred and has been logged.');
-                        // die("Error adding user: " . $conn->error);
+                        //die('A fatal error occurred and has been logged.');
+                        $errorMessage = "Error adding user: " . $conn->error;
+                        $logger->error($errorMessage);
+                        die($errorMessage);
+                        
+                    } else {
+                        $logger->notice('New user added: ' . $username);
                     }
 
                       
@@ -59,12 +73,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $first_name = $conn->real_escape_string($_POST['first_name']);
                     $last_name = $conn->real_escape_string($_POST['last_name']);
                     $email = $conn->real_escape_string($_POST['email']);
+                    $logger->info('Attempted to edit user ' . $username);
                     
                     //convert the appoved return value to a database value
                     if (isset($_POST['approved']) && isset($_POST['approved']) == 'on') {
                         $approved = 1;
+                        $logger->notice('Successfully edited user ' . $username);
+                        # TODO record which properties were edited!
                     } else {
                         $approved = 0;
+                        $logger->warning('Failed attempt to edit user ' . $username;)
                     }
 
 
@@ -73,8 +91,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     if (!$result) {
                         
-                        die("Error editing user: " . $conn->error);
-                        // die('A fatal error occurred and has been logged.');
+                        $errorMessage = "Error editing user: " . $conn->error;
+                        $logger->error($errorMessage);
+                        die($errorMessage);
                         
                     }
 
@@ -90,12 +109,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $user_id = $_POST['user_id'];
 
                     $query = "DELETE FROM users WHERE user_id=$user_id";
+                    $logger->notice('Attempt made to delete user with id ' . $user_id);
                     $result = $conn->query($query);
 
                     if (!$result) {
                         
-                        die('A fatal error occurred and has been logged.');
-                        // die("Error deleting user: " . $conn->error);
+                        //die('A fatal error occurred and has been logged.');
+                        $errorMessage = "Error deleting user: " . $conn->error;
+                        $logger->error($errorMessage);
+                        die($errorMessage);
+                    } else {
+                        $logger->notice('Deleted user with id ' . $user_id);
                     }
                     
 

@@ -1,4 +1,4 @@
-FROM php:7.4.33-fpm-alpine as backend-php-server
+FROM php:8.4-rc-fpm-alpine as backend-php-server
 
 # Useful PHP extension installer image, copy binary into your container
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
@@ -16,7 +16,7 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 
 # obtain composer using multi-stage build
 # https://docs.docker.com/build/building/multi-stage/
-COPY --from=composer:2.4 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
 
 #Here, we are copying only composer.json and composer.lock (instead of copying the entire source)
 # right before doing composer install.
@@ -31,7 +31,19 @@ RUN composer install --prefer-dist --no-dev --no-scripts --no-progress --no-inte
 # copy application files to the working directory
 COPY ./webapp .
 
-RUN chmod 777 /var/www/html/public/vaults/uploads
+
+
+RUN chmod 664 /var/www/html/public/vaults/uploads 
+# owner has read and write permissions (no execute) 
+# TODO: do I want to allow execution? Will I have regrets 
+## File group has read and write permissions 
+## TODO: Should they have write?
+### Default is read-only 
 
 # run composer dump-autoload --optimize
 RUN composer dump-autoload --optimize
+
+
+#RUN chmod 1770 /var/run/mysqld 
+#attempt to fix error about access to this 
+#okay look if you're going to error out with the claim it doesn't exist what do you want from me!!! 

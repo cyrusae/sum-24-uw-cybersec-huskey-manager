@@ -2,6 +2,16 @@
 
 session_start();
 
+include './components/loggly-logger.php';
+include './components/console-logger.php';
+
+if (!isset($_SESSION['count'])) {
+    $_SESSION['count'] = 1;
+    $_SESSION['ip'] = filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
+} else {
+    $_SESSION['count']++;
+} //Count session user-side to make credential-stuffing harder (this is a work in progress, don't look at me.)
+
 $hostname = 'backend-mysql-database';
 $username = 'user';
 $password = 'supersecretpw';
@@ -9,16 +19,20 @@ $database = 'password_manager';
 
 $conn = new mysqli($hostname, $username, $password, $database);
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+//This seems wrong? 
+// if ($conn->connect_error) {
+//    die("Connection failed: " . $conn->connect_error);
+//}
 
-unset($error_message);
+//unset($error_message);
 
 if ($conn->connect_error) {
     $errorMessage = "Connection failed: " . $conn->connect_error;    
+    $logger->error($errorMessage); //Log failed connection
     die($errorMessage);
 }
+//TODO:
+//setcookie()
 
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -26,31 +40,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $sql = "SELECT * FROM users WHERE username = '$username' AND password = '$password' AND approved = 1";
+    $sql = "SELECT username FROM users WHERE username = '$username'";
+    $sql_exists = "SELECT * FROM users WHERE username = '$username' AND password = '$password' AND approved = 1";
     $result = $conn->query($sql);
 
     if($result->num_rows > 0) {
-       
+        $result = $conn->query($sql_exists); 
+       if ($result->num_rows < 1) {
+        $warningMessage = 'Login failed with incorrect password for username ' . $username;
+        $logger->warning($warningMessage);
+        $error_message = 'Invalid username or password.';
+       } else {
+        $logger->notice('Login attempted for username ' . $username);
         $userFromDB = $result->fetch_assoc();
 
         //$_COOKIE['authenticated'] = $username;
-        setcookie('authenticated', $username, time() + 3600, '/');     
+        setcookie('authenticated', $username, time() + 3600, '/'); 
+        $logger->info('New session begun for user: ' . $username);   
 
-        if ($userFromDB['default_role_id'] == 1)
-        {        
-            setcookie('isSiteAdministrator', true, time() + 3600, '/');                
+        if ($userFromDB['default_role_id'] == 1) {        
+            setcookie('isSiteAdministrator', true, time() + 3600, '/');
+            $logger->info('Administrator login by ' . $username);                
         }else{
             unset($_COOKIE['isSiteAdministrator']); 
             setcookie('isSiteAdministrator', '', -1, '/'); 
         }
         header("Location: index.php");
-        exit();
+        exit(); }
     } else {
-        $error_message = 'Invalid username or password.';  
+        $error_message = 'Invalid username or password.'; 
+        $logger->warning('Login failed for nonexistent user: ' . $username); 
+        //TODO: Track number of failed login attempts separately for rejection purposes 
     }
+
+
 
     $conn->close();
 }
+    $session_info = var_export($_SESSION, true);
+    //SESSION TELL ME YOUR SECRETS
+    $logger->info('A session exists: ' . time() . ' : ' . $session_info);
+//    echo('PANTS?'); //echo works
+//echo('Contents of var_export this time: ' . $session_info);
+
 
 ?>
 
@@ -84,6 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
             <div class="mt-3 text-center">
                 <a href="./users/request_account.php" class="btn btn-secondary btn-block">Request an Account</a>
+            <!-- TODO add timeout on requesting accounts so that spamming that isn't viable either --> 
             </div>
         </div>
     </div>

@@ -1,6 +1,7 @@
 <?php
 
 include '../components/authenticate.php';
+include '../components/loggly-logger.php';
 
 
 $hostname = 'backend-mysql-database';
@@ -10,31 +11,32 @@ $database = 'password_manager';
 
 $conn = new mysqli($hostname, $username, $password, $database);
 
-if ($conn->connect_error) {
-
-    die ('A fatal error occurred and has been logged.');
-    //die("Connection failed: " . $conn->connect_error);
+if ($conn->connect_error) {    
+    //die('A fatal error occurred and has been logged.');
+    $errorMessage = "Connection failed: " . $conn->connect_error;
+    $logger->error($errorMessage);
+    die($errorMessage);
 }
-
 // Add Vault
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset ($_POST['vaultName'])) {
     $vaultName = $_POST['vaultName'];
-    $userId = 1; // Replace with the actual user ID
+    $userId = 1; // Replace with the actual user ID 
+    //TODO: Why are you not actually replacing it with the user ID though 
 
     $query = "INSERT INTO vaults (vault_name) VALUES ('$vaultName')";
     $result = $conn->query($query);
 
     if (!$result) {
-
-        die ('A fatal error occurred and has been logged.');
-        // die("Error adding vault: " . $conn->error);
+        //die ('A fatal error occurred and has been logged.');
+         die("Error adding vault: " . $conn->error);
     }
 
     // Retrieve the ID of the inserted vault
     $insertedVaultId = $conn->insert_id;
 
-    // We need to fetch the user_id based off the username in order to complete the permission insert, we are going to default to Owner for the role so we can hardcode that without looking it up
 
+    // We need to fetch the user_id based off the username in order to complete the permission insert, we are going to default to Owner for the role so we can hardcode that without looking it up
+///// TODO sproc this
     $user = $_COOKIE['authenticated'];
     $queryFetchUserId = "SELECT user_id FROM users WHERE username = '$user'";
     $resultFetchUserId = $conn->query($queryFetchUserId);
@@ -51,8 +53,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset ($_POST['vaultName'])) {
 
         if (!$resultInsertPermission) {
 
-            //  die("Error adding permission, Query : " .  $queryInsertPermission . " Error Info : " . $conn->error);
-            die ('A fatal error occurred while adding permission.');
+            die("Error adding permission, Query : " .  $queryInsertPermission . " Error Info : " . $conn->error);
+            //die ('A fatal error occurred while adding permission.');
         }
     } else {
         die ("User with username '$user' not found.");
@@ -72,8 +74,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset ($_POST['editVaultName']) && 
     $result = $conn->query($query);
 
     if (!$result) {
-        die ('A fatal error occurred and has been logged.');
-        // die("Error editing vault: " . $conn->error);
+        //die ('A fatal error occurred and has been logged.');
+        die("Error editing vault: " . $conn->error);
     }
 
     // Redirect to the current page after editing the vault
@@ -90,8 +92,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset ($_POST['deleteVaultId']) && 
     $result = $conn->query($query);
 
     if (!$result) {
-        die ('A fatal error occurred and has been logged.');
-        //die("Error deleting vault: " . $conn->error);
+        //die ('A fatal error occurred and has been logged.');
+        die("Error deleting vault: " . $conn->error);
     }
 
     // Redirect to the current page after deleting the vault

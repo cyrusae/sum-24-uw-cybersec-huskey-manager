@@ -2,6 +2,8 @@
 
 include '../components/authenticate.php';
 include '../components/admin-authorization.php';
+include '../components/loggly-logger.php';
+
 
 $hostname = 'backend-mysql-database';
 $username = 'user';

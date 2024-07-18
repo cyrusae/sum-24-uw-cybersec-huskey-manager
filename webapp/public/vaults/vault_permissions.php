@@ -1,5 +1,6 @@
 <?php
 
+include '../components/loggly-logger.php';
 
 $hostname = 'backend-mysql-database';
 $username = 'user';
@@ -8,8 +9,11 @@ $database = 'password_manager';
 
 $conn = new mysqli($hostname, $username, $password, $database);
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+if ($conn->connect_error) {    
+    //die('A fatal error occurred and has been logged.');
+    $errorMessage = "Connection failed: " . $conn->connect_error;
+    $logger->error($errorMessage);
+    die($errorMessage);
 }
 
 // Fetch users, roles, and vaults from the database
@@ -33,7 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $result = $conn->query($query);
 
             if (!$result) {
-                die("Error managing user-role-vault relationship: " . $conn->error);
+                $errorMessage = "Error managing user-role-vault relationship: " . $conn->error;
+                $logger->error($errorMessage);
+                die($errorMessage);
             }
 
             // Redirect to the current page after managing the relationship
@@ -55,7 +61,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $resultDelete = $conn->query($queryDelete);
 
             if (!$resultDelete) {
-                die("Error deleting permission. Query : " . $queryDelete . " Error : " . $conn->error);
+                $errorMessage = "Error deleting permission. Query : " . $queryDelete . " Error : " . $conn->error;
+                $logger->error($errorMessage);
+                die($errorMessage);
             }
 
             // Redirect to the current page after deleting the permission

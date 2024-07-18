@@ -1,5 +1,8 @@
 <?php
 
+include '../components/loggly-logger.php';
+
+
 // Replace with your database connection details
 $hostname = 'backend-mysql-database';
 $username = 'user';
@@ -9,9 +12,11 @@ $database = 'password_manager';
 
 $conn = new mysqli($hostname, $username, $password, $database);
 
-if ($conn->connect_error) {
-    die ('A fatal error occurred and has been logged.');
-    // die("Connection failed: " . $conn->connect_error);
+if ($conn->connect_error) {    
+    //die('A fatal error occurred and has been logged.');
+    $errorMessage = "Connection failed: " . $conn->connect_error;
+    $logger->error($errorMessage);
+    die($errorMessage);
 }
 
 $uploadDir = './uploads/'; // Specify the directory where you want to save the uploaded files
@@ -42,13 +47,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset ($_POST['addUsername']) && is
 
     $queryAddPassword = "INSERT INTO vault_passwords (vault_id, username, website, password, notes, file_path) 
                      VALUES ($vaultId, '$addUsername', '$addWebsite', '$addPassword', '$addNotes', $filePath)";
+                     //TODO Why do the quotes look like that?
 
     $resultAddPassword = $conn->query($queryAddPassword);
 
     if (!$resultAddPassword) {
-
-        die ('A fatal error occurred and has been logged.');
-        // die("Error adding password: " . $conn->error);
+        //die ('A fatal error occurred and has been logged.');
+        $errorMessage = "Error adding password: " . $conn->error;
+        $logger->error($errorMessage);
+        die($errorMessage);
     }
     // Redirect to the current page after adding the password
     header("Location: {$_SERVER['PHP_SELF']}?vault_id=$vaultId");
@@ -124,9 +131,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset ($_POST['deletePasswordId']) 
     $resultDeletePassword = $conn->query($queryDeletePassword);
 
     if (!$resultDeletePassword) {
-
-        die ('A fatal error occurred and has been logged.');
-        // die("Error deleting password: " . $conn->error);
+        //die ('A fatal error occurred and has been logged.');
+        die("Error deleting password: " . $conn->error);
     }
 
     // Redirect to the current page after deleting the password
