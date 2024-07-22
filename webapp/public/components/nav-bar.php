@@ -21,7 +21,7 @@
         <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
                 <a class="nav-link">
-                    <?php echo "Welcome " . $_COOKIE['authenticated'] ?>
+                    <?php echo "Welcome " . $_SESSION['authenticated'] ?>
                 </a>
             </li>
             <li class="nav-item active">
