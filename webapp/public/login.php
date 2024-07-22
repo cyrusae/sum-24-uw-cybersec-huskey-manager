@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
     $session_info = var_export($_SESSION, true);
     //SESSION TELL ME YOUR SECRETS
-    $logger->info('A session exists: ' . time() . ' : ' . $session_info);
+//    $logger->info('A session exists: ' . time() . ' : ' . $session_info);
 //    echo('PANTS?'); //echo works
 //echo('Contents of var_export this time: ' . $session_info);
 
