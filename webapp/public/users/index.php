@@ -12,7 +12,7 @@ $database = 'password_manager';
 
 $conn = new mysqli($hostname, $username, $password, $database);
 
-var_dump($_SESSION); //what's up
+//var_dump($_SESSION); //what's up
 
 if ($conn->connect_error) {    
     //die('A fatal error occurred and has been logged.');
