@@ -31,7 +31,7 @@
                 <a class="nav-link" href="/vaults/">Vaults</a>
             </li>
             <?php
-            if (isset($_COOKIE['isSiteAdministrator']) && $_COOKIE['isSiteAdministrator'] == true) {
+            if ($_SESSION['isSiteAdministrator'] == true) {
                 ?>
                 <li class="nav-item">
                     <a class="nav-link" href="/users/">Users</a>
@@ -40,7 +40,7 @@
             }
             ?>
             <?php
-            if (isset($_COOKIE['isSiteAdministrator']) && $_COOKIE['isSiteAdministrator'] == true) {
+            if ($_SESSION['isSiteAdministrator'] == true) {
                 ?>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/">Admin</a>
