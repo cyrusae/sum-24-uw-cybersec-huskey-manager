@@ -43,8 +43,8 @@ if ($conn->connect_error) {
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    $username = mysqli_real_escape_string($conn, $_POST['username']);
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
 
     $sql = "SELECT username FROM users WHERE username = '$username'";
     $sql_exists = "SELECT * FROM users WHERE username = '$username' AND password = '$password' AND approved = 1";
