@@ -1,5 +1,11 @@
 <?php
 
+setcookie(
+    ['secure' => true,
+    'httponly' => true,
+    'samesite' => 'Strict']
+);
+
 session_start();
 
 include './components/loggly-logger.php';
