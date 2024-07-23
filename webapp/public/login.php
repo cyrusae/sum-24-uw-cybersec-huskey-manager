@@ -1,10 +1,10 @@
 <?php
 
-setcookie(
-    ['secure' => true,
-    'httponly' => true,
-    'samesite' => 'Strict']
-);
+//setcookie(
+//    ['secure' => true,
+//    'httponly' => true,
+//    'samesite' => 'Strict']
+//);
 
 session_start();
 
