@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 include '../components/authenticate.php';
 include '../components/loggly-logger.php';
