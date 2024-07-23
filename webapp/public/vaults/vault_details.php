@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 include '../components/loggly-logger.php';
 
@@ -20,7 +21,8 @@ if ($conn->connect_error) {
 }
 
 $uploadDir = './uploads/'; // Specify the directory where you want to save the uploaded files
-
+//echo($_SESSION['authenticated']);
+$current_user = $_SESSION['authenticated'];
 
 // Add Password
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset ($_POST['addUsername']) && isset ($_POST['addWebsite']) && isset ($_POST['addPassword']) && isset ($_POST['vaultId'])) {
@@ -33,6 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset ($_POST['addUsername']) && is
     // Check if a file is uploaded
     if (!empty ($_FILES['file']['name'])) {
         $uploadFile = $uploadDir . basename($_FILES['file']['name']);
+        //TEST
+        echo("current user: " . get_current_user());
+        echo("script was executed under user: " . exec('whoami'));
 
         if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadFile)) {
             $filePath = "'" . $uploadFile . "'";
@@ -178,7 +183,7 @@ $queryVaultOwner = "SELECT *
                     WHERE vault_permissions.vault_id = $vaultId
                     AND vault_permissions.role_id = 1
                     AND vault_permissions.user_id = users.user_id
-                    AND users.username = '" . $_COOKIE['authenticated'] . "'";
+                    AND users.username = '" . $current_user . "'";
 
 $resultIsOwner = $conn->query($queryVaultOwner);
 

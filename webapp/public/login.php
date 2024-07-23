@@ -1,5 +1,11 @@
 <?php
 
+//setcookie(
+//    ['secure' => true,
+//    'httponly' => true,
+//    'samesite' => 'Strict']
+//);
+
 session_start();
 
 include './components/loggly-logger.php';
@@ -51,19 +57,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $logger->warning($warningMessage);
         $error_message = 'Invalid username or password.';
        } else {
-        $logger->notice('Login attempted for username ' . $username);
+//        $logger->notice('Login attempted for username ' . $username);
+
+//TODO: regenerate session
         $userFromDB = $result->fetch_assoc();
 
-        //$_COOKIE['authenticated'] = $username;
-        setcookie('authenticated', $username, time() + 3600, '/'); 
+        $_SESSION['authenticated'] = $username;
         $logger->info('New session begun for user: ' . $username);   
 
         if ($userFromDB['default_role_id'] == 1) {        
-            setcookie('isSiteAdministrator', true, time() + 3600, '/');
+            $_SESSION['isSiteAdministrator'] = true;
             $logger->info('Administrator login by ' . $username);                
         }else{
-            unset($_COOKIE['isSiteAdministrator']); 
-            setcookie('isSiteAdministrator', '', -1, '/'); 
+            $_SESSION['isSiteAdministrator'] = false;
         }
         header("Location: index.php");
         exit(); }
@@ -79,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
     $session_info = var_export($_SESSION, true);
     //SESSION TELL ME YOUR SECRETS
-    $logger->info('A session exists: ' . time() . ' : ' . $session_info);
+//    $logger->info('A session exists: ' . time() . ' : ' . $session_info);
 //    echo('PANTS?'); //echo works
 //echo('Contents of var_export this time: ' . $session_info);
 

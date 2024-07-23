@@ -20,13 +20,16 @@ if ($conn->connect_error) {
 //TODO log number of account creation attempts (form submissions)
 //TODO throttle account creation 
 //TODO limit account name collisions (need a message reflecting it)
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_SESSION['hasRequestedAccount'] !== true) {
+    
     
     $username = $_POST['username'];
     $password = $_POST['password'];
     $firstName = $_POST['first_name'];
     $lastName = $_POST['last_name'];
     $email = $_POST['email'];
+
+
     
 //TODO check collisions, for Christ's sake.
     $sql = "INSERT INTO users (username, first_name, last_name, email, password, default_role_id, approved) 
@@ -35,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($conn->query($sql) === TRUE) {
         header("Location: /login.php");
         $logger->notice('New account created for ' . $username);
+        $_SESSION['hasRequestedAccount'] = true;
         exit();
     } else {
         $error_message = 'Error creating account: ' . $conn->error;
