@@ -5,6 +5,11 @@
 //    'httponly' => true,
 //    'samesite' => 'Strict']
 //);
+ini_set(session.cookie_secure, 'on');
+//TODO: can I get away with this?
+ini_set(session.use_strict_mode, 1);
+ini_set(session.cookie_samesite, 'Strict');
+ini_set(session.cookie_httponly, true);
 
 session_start();
 
@@ -61,6 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 //TODO: regenerate session
         $userFromDB = $result->fetch_assoc();
+        session_regenerate_id(true);
 
         $_SESSION['authenticated'] = $username;
         $logger->info('New session begun for user: ' . $username);   
