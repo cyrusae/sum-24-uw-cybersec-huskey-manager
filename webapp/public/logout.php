@@ -15,6 +15,7 @@ unset($_SESSION['count']); //If you successfully logged in and out you get to go
 
 session_unset();
 session_destroy();
+session_regenerate_id(true);
 header('Location: /login.php');
 exit();
 
