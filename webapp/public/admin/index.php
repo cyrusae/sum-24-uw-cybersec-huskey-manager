@@ -50,7 +50,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $result = $conn->query($query);
 
             if (!$result) {
-                die("Error managing user-role-vault relationship: " . $conn->error);
+                $errorMessage = "Error managing user-role-vault relationship: " . $conn->error;
+                $logger->error($errorMessage);
+                die($errorMessage);
             }
 
             // Redirect to the current page after managing the relationship
@@ -72,7 +74,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $resultDelete = $conn->query($queryDelete);
 
             if (!$resultDelete) {
-                die("Error deleting permission: " . $conn->error);
+                $errorMessage = "Error deleting permission: " . $conn->error;
+                $logger->error($errorMessage);
+                die($errorMessage);
             }
 
             // Redirect to the current page after deleting the permission
