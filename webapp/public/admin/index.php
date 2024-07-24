@@ -19,7 +19,11 @@ if ($conn->connect_error) {
     die($errorMessage);
 }
 
-
+if ($_SESSION['isSiteAdministrator'] !== true) {
+    header('Location: /index.php');
+    $logger->notice('An unauthorized user ' . $_SESSION['authenticated'] . ' attempted to access the admin panel.');
+    die('Stop that.');
+}
 // Fetch users, roles, and vaults from the database
 $queryUsers = "SELECT * FROM users";
 $resultUsers = $conn->query($queryUsers);
