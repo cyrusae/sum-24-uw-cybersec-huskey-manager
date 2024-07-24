@@ -1,5 +1,5 @@
 <?php
-
+session_start(); //get access to our session variables again 
 include '../components/authenticate.php';
 include '../components/admin-authorization.php';
 include '../components/loggly-logger.php';
@@ -12,9 +12,13 @@ $database = 'password_manager';
 
 $conn = new mysqli($hostname, $username, $password, $database);
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+if ($conn->connect_error) {    
+    //die('A fatal error occurred and has been logged.');
+    $errorMessage = "Connection failed: " . $conn->connect_error;
+    $logger->error($errorMessage);
+    die($errorMessage);
 }
+
 
 // Fetch users, roles, and vaults from the database
 $queryUsers = "SELECT * FROM users";
