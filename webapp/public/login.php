@@ -31,7 +31,7 @@ $conn = new mysqli($hostname, $username, $password, $database);
 //    die("Connection failed: " . $conn->connect_error);
 //}
 
-//unset($error_message);
+unset($error_message);
 
 if ($conn->connect_error) {
     $errorMessage = "Connection failed: " . $conn->connect_error;    
