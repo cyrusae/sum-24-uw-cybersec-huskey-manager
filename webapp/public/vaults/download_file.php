@@ -1,4 +1,8 @@
 <?php
+
+//TODO: oh BOY do we ever want to monitor this shit 
+//TODO: improve error handling
+session_start(); //access to session data
 include '../components/loggly-logger.php';
 
 
