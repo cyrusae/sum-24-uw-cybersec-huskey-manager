@@ -1,17 +1,13 @@
 <?php
 
-//setcookie(
-//    ['secure' => true,
-//    'httponly' => true,
-//    'samesite' => 'Strict']
-//);
-ini_set(session.cookie_secure, 'on');
-//TODO: can I get away with this?
-ini_set(session.use_strict_mode, 1);
-ini_set(session.cookie_samesite, 'Strict');
-ini_set(session.cookie_httponly, true);
 
 session_start();
+//NOTE: This throws a fatal error with "Undefined constant 'session'"
+//ini_set(session.cookie_secure, 'on');
+//TODO: can I get away with this?
+//ini_set(session.use_strict_mode, 1);
+//ini_set(session.cookie_samesite, 'Strict');
+//ini_set(session.cookie_httponly, true);
 
 include './components/loggly-logger.php';
 include './components/console-logger.php';
