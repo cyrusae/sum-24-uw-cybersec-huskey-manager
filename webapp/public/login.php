@@ -12,12 +12,8 @@ session_start();
 include './components/loggly-logger.php';
 include './components/console-logger.php';
 
-if (!isset($_SESSION['count'])) {
-    $_SESSION['count'] = 1;
-    $_SESSION['ip'] = filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
-} else {
-    $_SESSION['count']++;
-} //Count session user-side to make credential-stuffing harder (this is a work in progress, don't look at me.)
+$_SESSION['ip'] = filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
+ //Count session user-side to make credential-stuffing harder (this is a work in progress, don't look at me.)
 
 $hostname = 'backend-mysql-database';
 $username = 'user';
@@ -44,7 +40,8 @@ if ($conn->connect_error) {
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
-    $username = mysqli_real_escape_string($conn, $_POST['username']);
+//    $username = mysqli_real_escape_string($conn, $_POST['username']);
+    $username = $_POST['username'];
     $password = mysqli_real_escape_string($conn, $_POST['password']);
 
     $sql = "SELECT username FROM users WHERE username = '$username'";
@@ -58,14 +55,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $logger->warning($warningMessage);
         $error_message = 'Invalid username or password.';
        } else {
-//        $logger->notice('Login attempted for username ' . $username);
-
-//TODO: regenerate session
         $userFromDB = $result->fetch_assoc();
         session_regenerate_id(true);
 
         $_SESSION['authenticated'] = $username;
-        $logger->info('New session begun for user: ' . $username);   
+    //    $logger->info('New session begun for user: ' . $username);   
 
         if ($userFromDB['default_role_id'] == 1) {        
             $_SESSION['isSiteAdministrator'] = true;
@@ -85,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $conn->close();
 }
-    $session_info = var_export($_SESSION, true);
+  //  $session_info = var_export($_SESSION, true);
     //SESSION TELL ME YOUR SECRETS
 //    $logger->info('A session exists: ' . time() . ' : ' . $session_info);
 //    echo('PANTS?'); //echo works
