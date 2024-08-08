@@ -381,7 +381,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset ($_POST['deleteFilePasswordId
                         </div>
                         <div class="form-group">
                             <label for="file">File:</label>
-                            <input type="file" name="file">
+                            <input type="file" name="file" accept=".doc,.docx,application/msword,application/pdf,.pdf,image/*,.md,text/*">
                         </div>
                         <button type="submit" class="btn btn-primary">Add Password</button>
                     </form>
