@@ -1,6 +1,12 @@
 <?php
 
-
+session_set_cookie_params([
+    'lifetime' => 60000,
+    'path' => '/',
+    'secure' => true,
+    'httponly' => true,
+    'samesite' => 'Strict'
+]);
 session_start();
 //NOTE: This throws a fatal error with "Undefined constant 'session'"
 //ini_set(session.cookie_secure, 'on');
