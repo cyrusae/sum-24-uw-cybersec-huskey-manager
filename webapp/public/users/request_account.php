@@ -1,4 +1,5 @@
 <?php
+session_start();
 include '../components/loggly-logger.php';
 include '../components/console-logger.php';
 
@@ -23,11 +24,11 @@ if ($conn->connect_error) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_SESSION['hasRequestedAccount'] !== true) {
     
     
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $firstName = $_POST['first_name'];
-    $lastName = $_POST['last_name'];
-    $email = $_POST['email'];
+    $username = mysqli_real_escape_string($conn, $_POST['username']);
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
+    $firstName = mysqli_real_escape_string($conn, $_POST['first_name']);
+    $lastName = mysqli_real_escape_string($conn, $_POST['last_name']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
 
 
     
@@ -35,11 +36,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_SESSION['hasRequestedAccount'] !=
     $sql = "INSERT INTO users (username, first_name, last_name, email, password, default_role_id, approved) 
             VALUES ('$username', '$firstName', '$lastName', '$email', '$password', 3, 0)";
 
+
     if ($conn->query($sql) === TRUE) {
-        header("Location: /login.php");
-        $logger->notice('New account created for ' . $username);
-        $_SESSION['hasRequestedAccount'] = true;
-        exit();
+            if ($_SESSION['hasRequestedAccount'] === true) {
+                $_SESSION['attemptedAccountRequests']++;
+                //TODO: Cut off repeated requests and block user instead of just spawning more of this
+                $logger->notice('Duplicate account creation attempted. Username: ' . $username . '. Attempt #' . $_SESSION['attemptedAccountRequests']);
+                die('You have already requested an account. If you believe this message to be in error, contact your network administrator.');
+            } else {
+                header("Location: /login.php");
+                $logger->notice('New account created for ' . $username);
+                $_SESSION['hasRequestedAccount'] = true;
+                $_SESSION['attemptedAccountRequests'] = 1;
+                exit();
+        }
     } else {
         $error_message = 'Error creating account: ' . $conn->error;
         $logger->error($error_message);

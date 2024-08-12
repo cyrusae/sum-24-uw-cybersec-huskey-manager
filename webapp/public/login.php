@@ -1,22 +1,25 @@
 <?php
 
-//setcookie(
-//    ['secure' => true,
-//    'httponly' => true,
-//    'samesite' => 'Strict']
-//);
-
+session_set_cookie_params([
+    'lifetime' => 60000,
+    'path' => '/',
+    'secure' => true,
+    'httponly' => true,
+    'samesite' => 'Strict'
+]);
 session_start();
+//NOTE: This throws a fatal error with "Undefined constant 'session'"
+//ini_set(session.cookie_secure, 'on');
+//TODO: can I get away with this?
+//ini_set(session.use_strict_mode, 1);
+//ini_set(session.cookie_samesite, 'Strict');
+//ini_set(session.cookie_httponly, true);
 
 include './components/loggly-logger.php';
 include './components/console-logger.php';
 
-if (!isset($_SESSION['count'])) {
-    $_SESSION['count'] = 1;
-    $_SESSION['ip'] = filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
-} else {
-    $_SESSION['count']++;
-} //Count session user-side to make credential-stuffing harder (this is a work in progress, don't look at me.)
+$_SESSION['ip'] = filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
+ //Count session user-side to make credential-stuffing harder (this is a work in progress, don't look at me.)
 
 $hostname = 'backend-mysql-database';
 $username = 'user';
@@ -30,7 +33,7 @@ $conn = new mysqli($hostname, $username, $password, $database);
 //    die("Connection failed: " . $conn->connect_error);
 //}
 
-//unset($error_message);
+unset($error_message);
 
 if ($conn->connect_error) {
     $errorMessage = "Connection failed: " . $conn->connect_error;    
@@ -43,11 +46,12 @@ if ($conn->connect_error) {
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
+//    $username = mysqli_real_escape_string($conn, $_POST['username']);
     $username = $_POST['username'];
-    $password = $_POST['password'];
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
 
     $sql = "SELECT username FROM users WHERE username = '$username'";
-    $sql_exists = "SELECT * FROM users WHERE username = '$username' AND password = '$password' AND approved = 1";
+    $sql_exists = "SELECT * FROM users WHERE username = '$username' AND password = '$password' AND approved = 1"; //TODO: not star
     $result = $conn->query($sql);
 
     if($result->num_rows > 0) {
@@ -57,13 +61,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $logger->warning($warningMessage);
         $error_message = 'Invalid username or password.';
        } else {
-//        $logger->notice('Login attempted for username ' . $username);
-
-//TODO: regenerate session
         $userFromDB = $result->fetch_assoc();
+        session_regenerate_id(true);
 
         $_SESSION['authenticated'] = $username;
-        $logger->info('New session begun for user: ' . $username);   
+    //    $logger->info('New session begun for user: ' . $username);   
 
         if ($userFromDB['default_role_id'] == 1) {        
             $_SESSION['isSiteAdministrator'] = true;
@@ -83,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $conn->close();
 }
-    $session_info = var_export($_SESSION, true);
+  //  $session_info = var_export($_SESSION, true);
     //SESSION TELL ME YOUR SECRETS
 //    $logger->info('A session exists: ' . time() . ' : ' . $session_info);
 //    echo('PANTS?'); //echo works

@@ -36,13 +36,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset ($_POST['addUsername']) && is
     if (!empty ($_FILES['file']['name'])) {
         $uploadFile = $uploadDir . basename($_FILES['file']['name']);
         //TEST
-        echo("current user: " . get_current_user());
-        echo("script was executed under user: " . exec('whoami'));
+ //       echo("current user: " . get_current_user());
+//        echo("script was executed under user: " . exec('whoami'));
 
         if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadFile)) {
             $filePath = "'" . $uploadFile . "'";
         } else {
-            // Handle file upload error            
+            // Handle file upload error       
+            //TODO: log ths error      
             die ('Error uploading file.');
         }
     } else {
@@ -380,7 +381,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset ($_POST['deleteFilePasswordId
                         </div>
                         <div class="form-group">
                             <label for="file">File:</label>
-                            <input type="file" name="file">
+                            <input type="file" name="file" accept=".doc,.docx,application/msword,application/pdf,.pdf,image/*,.md,text/*">
                         </div>
                         <button type="submit" class="btn btn-primary">Add Password</button>
                     </form>

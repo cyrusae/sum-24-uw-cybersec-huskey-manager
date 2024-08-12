@@ -1,5 +1,5 @@
 <?php
-
+session_start(); //get access to our session variables again 
 include '../components/authenticate.php';
 include '../components/admin-authorization.php';
 include '../components/loggly-logger.php';
@@ -12,10 +12,18 @@ $database = 'password_manager';
 
 $conn = new mysqli($hostname, $username, $password, $database);
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+if ($conn->connect_error) {    
+    //die('A fatal error occurred and has been logged.');
+    $errorMessage = "Connection failed: " . $conn->connect_error;
+    $logger->error($errorMessage);
+    die($errorMessage);
 }
 
+if ($_SESSION['isSiteAdministrator'] !== true) {
+    header('Location: /index.php');
+    $logger->notice('An unauthorized user ' . $_SESSION['authenticated'] . ' attempted to access the admin panel.');
+    die('Stop that.');
+}
 // Fetch users, roles, and vaults from the database
 $queryUsers = "SELECT * FROM users";
 $resultUsers = $conn->query($queryUsers);
@@ -42,7 +50,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $result = $conn->query($query);
 
             if (!$result) {
-                die("Error managing user-role-vault relationship: " . $conn->error);
+                $errorMessage = "Error managing user-role-vault relationship: " . $conn->error;
+                $logger->error($errorMessage);
+                die($errorMessage);
             }
 
             // Redirect to the current page after managing the relationship
@@ -64,7 +74,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $resultDelete = $conn->query($queryDelete);
 
             if (!$resultDelete) {
-                die("Error deleting permission: " . $conn->error);
+                $errorMessage = "Error deleting permission: " . $conn->error;
+                $logger->error($errorMessage);
+                die($errorMessage);
             }
 
             // Redirect to the current page after deleting the permission

@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 // Check if the user has the necessary permissions for a specific operation on a vault
 function hasPermission($operation, $vaultId) {
@@ -6,7 +7,7 @@ function hasPermission($operation, $vaultId) {
     $conn = $GLOBALS["conn"];
 
     // If the user is a site administrator, then they have permission so return true immediately.
-    if(isset($_SESSION['isSiteAdministrator']) && $_SESSION['isSiteAdministrator'] == true ){
+    if($_SESSION['isSiteAdministrator'] == true ){
         return true;
     } else {
         // If the user is not an administrator, check their role and permission
