@@ -8,7 +8,7 @@ $sql->fetch();
 //add exit/failure on not locating existing user here
 
 $algo = PASSWORD_DEFAULT;
-$options = ['cost' => 10]
+$options = ['cost' => 10];
 
 $password = $_POST['password'];
 
@@ -17,7 +17,7 @@ if (password_verify($password, $password_expected) || ($password === $password_e
  $hashed_password = password_hash($password, $algo, $options);
  if (password_needs_rehash($password_expected, $algo, $options) || ($password === $password_expected)) {
   $sql_update_password = $conn->prepare("UPDATE users SET password = ? WHERE username = ?");
-  $sql_update_password->bind_param("ss", $hashed_password, $username)
+  $sql_update_password->bind_param("ss", $hashed_password, $username);
   $sql_update_password->execute();
   $logger->notice("Password for " . $username . "was rehashed and updated");
  }
@@ -27,7 +27,7 @@ if (password_verify($password, $password_expected) || ($password === $password_e
  $sql_get_user->bind_result($result);
  $sql_get_user->fetch();
  $userFromDB = $result->fetch_assoc();
- return $userFromDB;
+// return $userFromDB; //upgrade to function, in my dreams.
 } else {
  //Fail this login attempt
 }
