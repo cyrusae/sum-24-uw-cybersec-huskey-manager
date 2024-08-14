@@ -16,6 +16,10 @@ services:
             target: backend-php-server
         environment:
             LOGGLY_TOKEN: "${LOGGLY_TOKEN}"
+            MYSQL_ROOT_PASSWORD: "${MYSQL_PASSWORD}"
+            MYSQL_USER: "${MYSQL_USER}"
+            MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+            MYSQL_DATABASE: "${MYSQL_DATABASE}"
         extra_hosts:
             - host.docker.internal:host-gateway
     # mysql
