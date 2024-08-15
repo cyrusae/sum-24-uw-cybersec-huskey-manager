@@ -43,7 +43,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
 //    $username = mysqli_real_escape_string($conn, $_POST['username']);
     $username = $_POST['username'];
-    $password = mysqli_real_escape_string($conn, $_POST['password']);
+    $password = $_POST['password'];
+    $sql_password = $conn->prepare("SELECT password FROM users WHERE username = ? AND approved = 1");
+    $sql_password->bind_param("s", $username);
+    $sql_password->execute();
+    $sql_password->store_result();
+    $sql_password->bind_result($password_expected);
+    $sql_password->fetch();
+    //Test!
+    //echo 'TEST: there was an expected password, ' . $password_expected;
+    //echo var_dump($password_expected);
+    //echo gettype($password_expected);
+    //Finding: if it's not there it returns NULL with type NULL 
+    if ($password_expected === NULL) {
+//        echo 'This failed based on the password, which is the desired behavior.';
+        $error_message = 'Invalid username or password.'; 
+    }
+    $algo = PASSWORD_DEFAULT; //trust PHP to use the gnarliest encryption it has available
+    $options = ['cost' => 10]; //recommended as a default
+    if (password_verify($password, $password_expected) || ($password === $password_expected)) {
+        $hashed_password = password_hash($password, $algo, $options);
+        echo 'The password verification is working?? Expected hash: ' . $hashed_password;
+        
+    }
+
+
 
     $sql = "SELECT username FROM users WHERE username = '$username'";
     $sql_exists = "SELECT * FROM users WHERE username = '$username' AND password = '$password' AND approved = 1"; //TODO: not star
