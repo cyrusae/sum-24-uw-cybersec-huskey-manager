@@ -61,8 +61,8 @@ CREATE TABLE IF NOT EXISTS vault_permissions (
 );
 
 -- Create an index on username for faster retrieval
---CREATE UNIQUE INDEX idx_username ON users(username);
---remove superfluous redundant index.
+CREATE UNIQUE INDEX idx_username ON users(username);
+-- remove superfluous redundant index.
 
 
 -- Insert sample roles
