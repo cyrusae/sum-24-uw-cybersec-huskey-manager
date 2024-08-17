@@ -16,27 +16,16 @@ include './components/console-logger.php';
 $_SESSION['ip'] = filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
  //Count session user-side to make credential-stuffing harder (this is a work in progress, don't look at me.)
 
-$hostname = 'backend-mysql-database';
-$username = 'user';
-$password = 'supersecretpw';
-$database = 'password_manager';
-
-$conn = new mysqli($hostname, $username, $password, $database);
-
-//This seems wrong? 
-// if ($conn->connect_error) {
-//    die("Connection failed: " . $conn->connect_error);
-//}
+ include './components/experimental/connection_maker.php';
+ 
 
 unset($error_message);
 
-if ($conn->connect_error) {
-    $errorMessage = "Connection failed: " . $conn->connect_error;    
-    $logger->error($errorMessage); //Log failed connection
-    die($errorMessage);
-}
-//TODO:
-//setcookie()
+//if ($conn->connect_error) {
+//    $errorMessage = "Connection failed: " . $conn->connect_error;    
+//    $logger->error($errorMessage); //Log failed connection
+//    die($errorMessage);
+//}
 
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -50,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sql_password->store_result();
     $sql_password->bind_result($password_expected);
     $sql_password->fetch();
+    $sql_password->close();
     //Test!
     //echo 'TEST: there was an expected password, ' . $password_expected;
     //echo var_dump($password_expected);
@@ -58,48 +48,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($password_expected === NULL) {
 //        echo 'This failed based on the password, which is the desired behavior.';
         $error_message = 'Invalid username or password.'; 
+//        exit();
     }
     $algo = PASSWORD_DEFAULT; //trust PHP to use the gnarliest encryption it has available
     $options = ['cost' => 10]; //recommended as a default
-    if (password_verify($password, $password_expected) || ($password === $password_expected)) {
-        $hashed_password = password_hash($password, $algo, $options);
-        echo 'The password verification is working?? Expected hash: ' . $hashed_password;
+    $hashed_password = password_hash($password, $algo, $options);
+//    echo 'TEST: Password expected was... ' . $password_expected;
+    if (password_verify($password, $password_expected) !== true) {
+
+//    }
+//    if (password_verify($password, $password_expected) || ($password === $password_expected)) {
         
+//        echo 'The password verification is working?? Expected hash: ' . $hashed_password;
+        if (password_needs_rehash($password_expected, $algo, $options) === true //|| ($password === $password_expected)
+        ) {
+//            echo 'Attempting to rehash the password now.';
+            $sql_update_user_password = $conn->prepare("UPDATE users SET password = ? WHERE username = ?");
+            $sql_update_user_password->bind_param("ss", $hashed_password, $username);
+            $sql_update_user_password->execute();
+            $logger->notice("Password for " . $username . " was rehashed and updated.");
+            $sql_update_user_password->close();
+
+        } else {
+            $error_message = 'Invalid username or password.';
+//            exit(); 
+        }
     }
 
+//TRY: at this point the potential inputs should be entirely under our control (because an attempted injection doesn't exist as an account and would be caught earlier). Can I just... query...?
+//        $sql_get_user = $conn->prepare("SELECT * FROM users WHERE username = ? AND password = ? AND approved = 1");
+ //       $sql_get_user->bind_param("ss", $username, $hashed_password);
+//        $sql_get_user->execute();
+//        $sql_get_user->store_result();
 
-
-    $sql = "SELECT username FROM users WHERE username = '$username'";
-    $sql_exists = "SELECT * FROM users WHERE username = '$username' AND password = '$password' AND approved = 1"; //TODO: not star
-    $result = $conn->query($sql);
-
-    if($result->num_rows > 0) {
-        $result = $conn->query($sql_exists); 
-       if ($result->num_rows < 1) {
-        $warningMessage = 'Login failed with incorrect password for username ' . $username;
-        $logger->warning($warningMessage);
-        $error_message = 'Invalid username or password.';
-       } else {
+//        $sql_get_user->bind_result($result);
+//        $sql_get_user->fetch();
+        $sql_find_user = "SELECT * FROM users WHERE username = '$username' AND password = '$hashed_password' AND approved = 1";
+        $result = $conn->query($sql_find_user);
         $userFromDB = $result->fetch_assoc();
-        session_regenerate_id(true);
-
+        if ($userFromDB === NULL) {
+            $error_message = 'Invalid username or password.';
+//            exit(); 
+        }
+//        echo 'Resulting in the userFromDB on faith that I am understanding correctly how we already prevented injection of... ' . var_dump($userFromDB);
+        
+//        $userFromDB = $sql_get_user->get_result();
+//        echo 'Just get_result, which is now userFromDB, is producing... ' . var_dump($userFromDB);
+//        echo 'Naive attempt at fetch_all is... ' . var_dump($result->fetch_all(MYSQLI_ASSOC));
+//        $userFromDB = $result->fetch_assoc();
+//        $userFromDB = $result->fetch_all(MYSQLI_ASSOC);
+//        echo 'userFromDB is giving... ' . var_dump($userFromDB);
         $_SESSION['authenticated'] = $username;
-    //    $logger->info('New session begun for user: ' . $username);   
-
-        if ($userFromDB['default_role_id'] == 1) {        
+        if ($userFromDB['default_role_id'] == 1) {
             $_SESSION['isSiteAdministrator'] = true;
-            $logger->info('Administrator login by ' . $username);                
-        }else{
+        } else {
             $_SESSION['isSiteAdministrator'] = false;
         }
         header("Location: index.php");
-        exit(); }
-    } else {
-        $error_message = 'Invalid username or password.'; 
-        $logger->warning('Login failed for nonexistent user: ' . $username); 
-        //TODO: Track number of failed login attempts separately for rejection purposes 
-    }
-
+        exit();
+//    } else {
+//        $error_message = 'Invalid username or password.';
+//    }
 
 
     $conn->close();
