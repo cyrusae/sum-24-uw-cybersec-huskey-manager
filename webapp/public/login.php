@@ -27,10 +27,30 @@ unset($error_message);
 //    die($errorMessage);
 //}
 
+
+$maxAttempts = 3;
+$lockoutDuration = 30;
+
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_SESSION['login_attempts'])) {
+        $_SESSION['login_attempts']++;
+    } else {
+        $_SESSION['login_attempts'] = 1;
+    }
+    if ($_SESSION['login_attempts'] >= $maxAttempts) {
+        if (isset($_SESSION['login_times_warned'])) {
+            $_SESSION['login_times_warned']++;
+            $total_tries = ($_SESSION['login_times_warned'] * $maxAttempts);
+        } else {
+            $_SESSION['login_times_warned'];
+            $total_tries = $maxAttempts;
+        }
+        $total_lockout = $_SESSION['login_attempts'] * $_SESSION['login_times_warned'] * $lockoutDuration * $_SESSION['login_times_warned'];
+        $error_message = 'Too many login attempts. Please try again later. If you believe you are seeing this message in error, contact your network administrator.';
+        $logger->warning('User ' . $username . ' with IP ' . $_SESSION['ip'] . ' was blocked for ' . $total_lockout . ' seconds due to a total of ' );
+    } 
     
-//    $username = mysqli_real_escape_string($conn, $_POST['username']);
     $username = $_POST['username'];
     $password = $_POST['password'];
     $sql_password = $conn->prepare("SELECT password FROM users WHERE username = ? AND approved = 1");
@@ -40,86 +60,71 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sql_password->bind_result($password_expected);
     $sql_password->fetch();
     $sql_password->close();
-    //Test!
-    //echo 'TEST: there was an expected password, ' . $password_expected;
-    //echo var_dump($password_expected);
-    //echo gettype($password_expected);
-    //Finding: if it's not there it returns NULL with type NULL 
-    if ($password_expected === NULL) {
-//        echo 'This failed based on the password, which is the desired behavior.';
-        $error_message = 'Invalid username or password.'; 
-//        exit();
-    }
-    $algo = PASSWORD_DEFAULT; //trust PHP to use the gnarliest encryption it has available
-    $options = ['cost' => 10]; //recommended as a default
-    $hashed_password = password_hash($password, $algo, $options);
-//    echo 'TEST: Password expected was... ' . $password_expected;
-    if (password_verify($password, $password_expected) !== true) {
 
-//    }
-//    if (password_verify($password, $password_expected) || ($password === $password_expected)) {
-        
-//        echo 'The password verification is working?? Expected hash: ' . $hashed_password;
-        if (password_needs_rehash($password_expected, $algo, $options) === true //|| ($password === $password_expected)
-        ) {
-//            echo 'Attempting to rehash the password now.';
+    
+    //Finding: if it's not there it returns NULL with type NULL 
+    if ($password_expected == NULL) {
+        $has_password = FALSE;
+        $error_message = 'Invalid username or password.';
+    } 
+    $algo = PASSWORD_DEFAULT; //trust PHP to use the gnarliest encryption it has available
+    $options = ['cost' => 13]; 
+    
+    if (!isset($has_password) || $has_password != FALSE) {
+        if (password_verify($password, $password_expected)) {
+            $has_password = TRUE;
+            $needs_update = FALSE;
+            session_regenerate_id(true);
+            $_SESSION['authenticated'] = $username;
+        } else if ($password_expected == $password || password_needs_rehash($password_expected, $algo, $options)) {
+            $needs_update = TRUE;
+            session_regenerate_id(true);
+            $_SESSION['authenticated'] = $username;
+        } else {
+            $has_password = FALSE;$needs_update = FALSE;
+            unset($_SESSION['authenticated']);
+            $error_message = 'Invalid username or password.';
+        }
+    } else {
+        $has_password = FALSE;
+        $needs_update = FALSE;
+        unset($_SESSION['authenticated']);
+        $error_message = 'Invalid username or password.';
+        exit();
+    }
+
+    if (isset($_SESSION['authenticated'])) {
+        if (isset($needs_update) && $needs_update == TRUE) {
+            $hashed_password = password_hash($password, $algo, $options);
             $sql_update_user_password = $conn->prepare("UPDATE users SET password = ? WHERE username = ?");
             $sql_update_user_password->bind_param("ss", $hashed_password, $username);
             $sql_update_user_password->execute();
-            $logger->notice("Password for " . $username . " was rehashed and updated.");
+            $logger->notice("Password for " . $username . " was rehashed and updated. Logging in now.");
             $sql_update_user_password->close();
-
-        } else {
-            $error_message = 'Invalid username or password.';
-//            exit(); 
         }
-    }
-
-//TRY: at this point the potential inputs should be entirely under our control (because an attempted injection doesn't exist as an account and would be caught earlier). Can I just... query...?
-//        $sql_get_user = $conn->prepare("SELECT * FROM users WHERE username = ? AND password = ? AND approved = 1");
- //       $sql_get_user->bind_param("ss", $username, $hashed_password);
-//        $sql_get_user->execute();
-//        $sql_get_user->store_result();
-
-//        $sql_get_user->bind_result($result);
-//        $sql_get_user->fetch();
-        $sql_find_user = "SELECT * FROM users WHERE username = '$username' AND password = '$hashed_password' AND approved = 1";
-        $result = $conn->query($sql_find_user);
+        $sql_get_user = $conn->prepare("SELECT * from users WHERE username = ? AND approved = 1");
+        $sql_get_user->bind_param('s', $username);
+        $sql_get_user->execute();
+        $result = $sql_get_user->get_result();
         $userFromDB = $result->fetch_assoc();
-        if ($userFromDB === NULL) {
-            $error_message = 'Invalid username or password.';
-//            exit(); 
+        if ($userFromDB !== NULL) {
+            if ($userFromDB['default_role_id'] == 1) 
+            {
+                $_SESSION['isSiteAdministrator'] = TRUE;
+            } else {
+                $_SESSION['isSiteAdministrator'] = FALSE;
+            }
+            unset($_SESSION['login_attempts']);
+            header("Location: index.php");
+            exit();
         }
-//        echo 'Resulting in the userFromDB on faith that I am understanding correctly how we already prevented injection of... ' . var_dump($userFromDB);
         
-//        $userFromDB = $sql_get_user->get_result();
-//        echo 'Just get_result, which is now userFromDB, is producing... ' . var_dump($userFromDB);
-//        echo 'Naive attempt at fetch_all is... ' . var_dump($result->fetch_all(MYSQLI_ASSOC));
-//        $userFromDB = $result->fetch_assoc();
-//        $userFromDB = $result->fetch_all(MYSQLI_ASSOC);
-//        echo 'userFromDB is giving... ' . var_dump($userFromDB);
-        $_SESSION['authenticated'] = $username;
-        if ($userFromDB['default_role_id'] == 1) {
-            $_SESSION['isSiteAdministrator'] = true;
-        } else {
-            $_SESSION['isSiteAdministrator'] = false;
-        }
-        header("Location: index.php");
-        exit();
-//    } else {
-//        $error_message = 'Invalid username or password.';
-//    }
-
-
+        $sql_get_user->close();
+    } else {
+        $error_message = 'Invalid username or password.';
+    }
     $conn->close();
 }
-  //  $session_info = var_export($_SESSION, true);
-    //SESSION TELL ME YOUR SECRETS
-//    $logger->info('A session exists: ' . time() . ' : ' . $session_info);
-//    echo('PANTS?'); //echo works
-//echo('Contents of var_export this time: ' . $session_info);
-
-
 ?>
 
 <!DOCTYPE html>
