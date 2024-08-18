@@ -1,7 +1,6 @@
 composer.lock
 vendor
 .env
-certs/*
 .venv/*
 __pycache__/
 .venv
