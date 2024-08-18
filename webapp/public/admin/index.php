@@ -1,5 +1,5 @@
 <?php
-session_start(); //get access to our session variables again 
+
 include '../components/authenticate.php';
 include '../components/admin-authorization.php';
 include '../components/loggly-logger.php';

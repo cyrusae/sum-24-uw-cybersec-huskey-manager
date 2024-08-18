@@ -1,5 +1,5 @@
 <?php
-session_start();
+//session_start();
 include '../components/loggly-logger.php';
 include '../components/console-logger.php';
 
