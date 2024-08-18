@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         # TODO record which properties were edited!
                     } else {
                         $approved = 0;
-                        $logger->warning('Failed attempt to edit user ' . $username;)
+                        $logger->warning('Failed attempt to edit user ' . $username);
                     }
 
 
