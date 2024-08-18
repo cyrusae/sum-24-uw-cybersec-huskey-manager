@@ -2,6 +2,7 @@
 session_start();
 
 include '../components/loggly-logger.php';
+include '../components/authenticate.php';
 
 
 // Replace with your database connection details

@@ -2,6 +2,7 @@
 session_start();
 
 include '../components/loggly-logger.php';
+include '../components/authenticate.php';
 
 $hostname = 'backend-mysql-database';
 $username = 'user';

@@ -2,8 +2,9 @@
 
 //TODO: oh BOY do we ever want to monitor this shit 
 //TODO: improve error handling
-session_start(); //access to session data
+//session_start(); //access to session data
 include '../components/loggly-logger.php';
+include '../components/authenticate.php';
 
 
 if (isset($_GET['file']) && isset($_GET['vault_id'])) {
