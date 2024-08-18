@@ -14,6 +14,13 @@
       "targets": [],
       "value": ""
     }, {
+      "id": "f5fa8729-250b-4285-9287-5b2f31ea613c",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "850x500",
+      "targets": [],
+      "value": ""
+    }, {
       "id": "c5fa636a-897d-4fef-90c9-6777f6be93f2",
       "comment": "",
       "command": "type",
@@ -80,7 +87,14 @@
       "id": "0e485132-9398-41e1-89de-9fc6313882da",
       "comment": "",
       "command": "open",
-      "target": "/login.php",
+      "target": "/logout.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "0fa8edb8-6295-4369-8400-46cf7bdfa9dc",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "600x500",
       "targets": [],
       "value": ""
     }, {
@@ -181,7 +195,14 @@
       "id": "b9b98108-6210-4011-8f27-4861d5228ee2",
       "comment": "",
       "command": "open",
-      "target": "/login.php",
+      "target": "/logout.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "3220b64a-c839-41bd-9b7e-e41e9e9df5c7",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "800x500",
       "targets": [],
       "value": ""
     }, {
@@ -252,6 +273,13 @@
       "comment": "",
       "command": "open",
       "target": "/login.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "62942fbb-28d4-4f94-9f63-8f14d89ec8a9",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "600x500",
       "targets": [],
       "value": ""
     }, {
@@ -357,7 +385,7 @@
       "id": "da6bcdb5-8261-493f-b58f-efda062ee946",
       "comment": "",
       "command": "open",
-      "target": "/login.php",
+      "target": "/logout.php",
       "targets": [],
       "value": ""
     }, {
@@ -379,12 +407,12 @@
         ["xpath=//input[@id='password']", "xpath:attributes"],
         ["xpath=//div[2]/input", "xpath:position"]
       ],
-      "value": "wrongwrong"
+      "value": "wrongwrongasfdsadf"
     }, {
       "id": "e6fdeadd-7602-40ae-b744-f1d35f311998",
       "comment": "",
       "command": "click",
-      "target": "xpath=//button[@type='submit']",
+      "target": "xpath=//button[contains(.,'Login')]",
       "targets": [
         ["css=.btn-primary", "css:finder"],
         ["xpath=//button[@type='submit']", "xpath:attributes"],
@@ -417,7 +445,7 @@
       "id": "f9485517-b296-4c45-9aef-3feaf92ec4b8",
       "comment": "",
       "command": "open",
-      "target": "/login.php",
+      "target": "/logout.php",
       "targets": [],
       "value": ""
     }, {
@@ -476,6 +504,249 @@
       ],
       "value": "Invalid username or password."
     }]
+  }, {
+    "id": "606f3d7e-8c3a-4af5-ae70-f57b5ee44645",
+    "name": "adminHasVaultsAccess",
+    "commands": [{
+      "id": "9ad6ae8c-54d9-4feb-8b51-bcd05b0e1674",
+      "comment": "",
+      "command": "open",
+      "target": "/logout.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "4a28cd7c-1d9b-4502-8786-bdad2e0eee87",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "861x467",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "a3184c2d-29d8-4725-9a37-1fe3066e82ad",
+      "comment": "",
+      "command": "type",
+      "target": "id=username",
+      "targets": [],
+      "value": "admin"
+    }, {
+      "id": "973b5bfa-7308-4e0f-9ea7-84b274418f85",
+      "comment": "",
+      "command": "type",
+      "target": "id=password",
+      "targets": [],
+      "value": "Sup3rS3cr3t@dm1n"
+    }, {
+      "id": "333c6626-8c3f-4c72-8d9e-97653c0cae73",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[@type='submit']",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "86f788ba-8edd-4ad2-9510-e0a0d343251b",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "linkText=Welcome admin",
+      "targets": [],
+      "value": "30000"
+    }, {
+      "id": "019dc0db-b9e8-4683-b14d-c80d72dbb8b7",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Vaults",
+      "targets": [
+        ["linkText=Vaults", "linkText"],
+        ["css=.nav-item:nth-child(3) > .nav-link", "css:finder"],
+        ["xpath=//a[contains(text(),'Vaults')]", "xpath:link"],
+        ["xpath=//div[@id='navbarNav']/ul/li[3]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/vaults/')]", "xpath:href"],
+        ["xpath=//li[3]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Vaults')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "e5b76e6f-d568-4e1d-89d4-1dd3996ff25c",
+      "comment": "",
+      "command": "click",
+      "target": "id=searchInput",
+      "targets": [
+        ["id=searchInput", "id"],
+        ["css=#searchInput", "css:finder"],
+        ["xpath=//input[@id='searchInput']", "xpath:attributes"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "3006e3f2-8645-466d-8fed-451746aff9ef",
+      "comment": "",
+      "command": "type",
+      "target": "id=searchInput",
+      "targets": [
+        ["id=searchInput", "id"],
+        ["css=#searchInput", "css:finder"],
+        ["xpath=//input[@id='searchInput']", "xpath:attributes"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "Vault"
+    }, {
+      "id": "a5c2afb8-ccb3-480a-85f3-ffc906dc1b81",
+      "comment": "",
+      "command": "sendKeys",
+      "target": "id=searchInput",
+      "targets": [
+        ["id=searchInput", "id"],
+        ["css=#searchInput", "css:finder"],
+        ["xpath=//input[@id='searchInput']", "xpath:attributes"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "${KEY_ENTER}"
+    }, {
+      "id": "8abf92d0-8c97-4f7f-bb2c-d700e0176b48",
+      "comment": "",
+      "command": "waitForText",
+      "target": "css=th:nth-child(1)",
+      "targets": [
+        ["css=th:nth-child(1)", "css:finder"],
+        ["xpath=//table[@id='vaultTable']/thead/tr/th", "xpath:idRelative"],
+        ["xpath=//th", "xpath:position"],
+        ["xpath=//th[contains(.,'Vault Name')]", "xpath:innerText"]
+      ],
+      "value": "Vault Name"
+    }]
+  }, {
+    "id": "a031edb2-36cc-4f34-870d-9411b12af70a",
+    "name": "userDoesNotHaveVaultAccess",
+    "commands": []
+  }, {
+    "id": "02b4d7ff-f23f-4b77-81ba-2b18d27d0423",
+    "name": "userDoesNotHaveUserAccess",
+    "commands": []
+  }, {
+    "id": "db25dc0e-b71c-4317-8514-19d39cb41dc4",
+    "name": "userCreateVault",
+    "commands": []
+  }, {
+    "id": "71fcd934-8027-4bca-81fa-fa7fcbd09332",
+    "name": "userCreateAndDeleteVault",
+    "commands": []
+  }, {
+    "id": "db5bcf9f-6c3d-4ddc-9fe4-c909b1fcbd05",
+    "name": "adminApproveAccountRequest",
+    "commands": []
+  }, {
+    "id": "a1b07b8a-48ea-4369-ab27-9fd8df329b3f",
+    "name": "adminRejectAccountRequest",
+    "commands": []
+  }, {
+    "id": "21fefe03-b1e1-46c3-ad54-461e2b8b282b",
+    "name": "userCannotAccessAdminConsole",
+    "commands": []
+  }, {
+    "id": "9b4cab4e-3c45-4f85-9286-e716530c7cef",
+    "name": "adminAccessAdminConsole",
+    "commands": [{
+      "id": "b9fa1dd5-0b85-489c-bb11-086674839b27",
+      "comment": "",
+      "command": "open",
+      "target": "/logout.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "f168964e-3455-44f8-9869-a42016cd04ee",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "522x357",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "135cacb8-effa-4017-a213-5d925a814774",
+      "comment": "",
+      "command": "type",
+      "target": "id=username",
+      "targets": [],
+      "value": "admin"
+    }, {
+      "id": "91d8fdad-099a-427c-90d6-6916cba176fe",
+      "comment": "",
+      "command": "type",
+      "target": "id=password",
+      "targets": [],
+      "value": "Sup3rS3cr3t@dm1n"
+    }, {
+      "id": "1122d708-0f29-435a-98c3-c42a01c7aa69",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[@type='submit']",
+      "targets": [
+        ["css=.btn-primary", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Login')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "2e1c5aa7-77fc-4293-89fa-83c1ae397365",
+      "comment": "",
+      "command": "click",
+      "target": "css=.navbar-toggler-icon",
+      "targets": [
+        ["css=.navbar-toggler-icon", "css:finder"],
+        ["xpath=//span", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "adc3bf8f-f59b-40ad-ac84-bb7851d643b6",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Admin",
+      "targets": [
+        ["linkText=Admin", "linkText"],
+        ["css=.nav-item:nth-child(5) > .nav-link", "css:finder"],
+        ["xpath=//a[contains(text(),'Admin')]", "xpath:link"],
+        ["xpath=//div[@id='navbarNav']/ul/li[5]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/admin/')]", "xpath:href"],
+        ["xpath=//li[5]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Admin')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "651fa181-67c9-4021-a7f1-c6a0511eedc0",
+      "comment": "",
+      "command": "waitForText",
+      "target": "css=label",
+      "targets": [
+        ["css=label", "css:finder"],
+        ["xpath=//label", "xpath:position"],
+        ["xpath=//label[contains(.,'Select Vault:')]", "xpath:innerText"]
+      ],
+      "value": "Select Vault:"
+    }]
+  }, {
+    "id": "ccee42f7-f91a-465d-971f-48b1ac3cf4d0",
+    "name": "redirectToLoginWhenLoggedOut",
+    "commands": [{
+      "id": "f3699d39-183b-496d-89d9-dfd3b31a7ee6",
+      "comment": "",
+      "command": "open",
+      "target": "/logout.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "43c7a9d0-4ade-4683-9ae8-bbed2c1b8d4f",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "id=username",
+      "targets": [],
+      "value": "30000"
+    }]
+  }, {
+    "id": "e3aa850e-3b56-4af0-a9ff-5b985a2a4bfb",
+    "name": "timeoutAccountRequestsPage",
+    "commands": []
+  }, {
+    "id": "da16fe08-1203-4582-a2c1-ed05f070860a",
+    "name": "timeoutLoginPage",
+    "commands": []
   }],
   "suites": [{
     "id": "9e04261a-56ab-435d-a60f-f0bb5205c74c",
@@ -484,6 +755,34 @@
     "parallel": false,
     "timeout": 300,
     "tests": []
+  }, {
+    "id": "813d80ec-1366-467f-9b10-b7a3974aef4c",
+    "name": "AdminActions",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["093a5490-0a42-462b-a00f-d520980dc1a2", "c6f7c61d-7651-4dbb-9fae-c32853ca4389", "9b4cab4e-3c45-4f85-9286-e716530c7cef", "606f3d7e-8c3a-4af5-ae70-f57b5ee44645"]
+  }, {
+    "id": "697d025c-2c66-4757-b54b-6025111ba18d",
+    "name": "AuthRejections",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["ccee42f7-f91a-465d-971f-48b1ac3cf4d0", "65cc47f5-08d8-4fea-baa8-6d1702fbce63", "50522ff1-bd13-4aeb-8f0d-578b6a8dd69a"]
+  }, {
+    "id": "9f73242a-d57d-481d-baa0-0df4a5fd2e19",
+    "name": "UsualUsersUsage",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["ccee42f7-f91a-465d-971f-48b1ac3cf4d0", "66e3572a-0839-4a4e-a752-c68c936f6917", "eded2f11-09aa-4758-bff7-53bbf5456dd9"]
+  }, {
+    "id": "e745317d-fd0a-4ae7-b478-9aae4cb15896",
+    "name": "TODO",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["db5bcf9f-6c3d-4ddc-9fe4-c909b1fcbd05", "a1b07b8a-48ea-4369-ab27-9fd8df329b3f", "21fefe03-b1e1-46c3-ad54-461e2b8b282b", "a031edb2-36cc-4f34-870d-9411b12af70a", "02b4d7ff-f23f-4b77-81ba-2b18d27d0423", "71fcd934-8027-4bca-81fa-fa7fcbd09332", "db25dc0e-b71c-4317-8514-19d39cb41dc4"]
   }],
   "urls": ["https://localhost/"],
   "plugins": []
