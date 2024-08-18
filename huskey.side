@@ -624,7 +624,156 @@
   }, {
     "id": "db25dc0e-b71c-4317-8514-19d39cb41dc4",
     "name": "userCreateVault",
-    "commands": []
+    "commands": [{
+      "id": "f9bf0d53-2ebc-4c96-945d-43fcef4f4a33",
+      "comment": "",
+      "command": "open",
+      "target": "/logout.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "54d67e51-4822-4ae6-8fcf-44491936cf65",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "519x356",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "bf8119c4-3295-4738-b3b0-744954bf0b05",
+      "comment": "",
+      "command": "type",
+      "target": "id=username",
+      "targets": [
+        ["id=username", "id"],
+        ["name=username", "name"],
+        ["css=#username", "css:finder"],
+        ["xpath=//input[@id='username']", "xpath:attributes"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "username"
+    }, {
+      "id": "4b8766f6-258b-40db-b87f-74e5fd59af49",
+      "comment": "",
+      "command": "type",
+      "target": "id=password",
+      "targets": [
+        ["id=password", "id"],
+        ["name=password", "name"],
+        ["css=#password", "css:finder"],
+        ["xpath=//input[@id='password']", "xpath:attributes"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "password!"
+    }, {
+      "id": "4de75286-0cd6-448e-903a-af79cedda950",
+      "comment": "",
+      "command": "sendKeys",
+      "target": "id=password",
+      "targets": [
+        ["id=password", "id"],
+        ["name=password", "name"],
+        ["css=#password", "css:finder"],
+        ["xpath=//input[@id='password']", "xpath:attributes"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "${KEY_ENTER}"
+    }, {
+      "id": "486612bf-3d79-429b-bebc-365478b9636e",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[@type='submit']",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "85ed64b4-b5d0-472a-8dbf-777d64fb18f9",
+      "comment": "",
+      "command": "click",
+      "target": "css=.navbar-toggler-icon",
+      "targets": [
+        ["css=.navbar-toggler-icon", "css:finder"],
+        ["xpath=//span", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "1f7708dc-84e1-4915-9ac7-0c93c82224d6",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//a[contains(text(),'Vaults')]",
+      "targets": [
+        ["linkText=Vaults", "linkText"],
+        ["css=.nav-item:nth-child(3) > .nav-link", "css:finder"],
+        ["xpath=//a[contains(text(),'Vaults')]", "xpath:link"],
+        ["xpath=//div[@id='navbarNav']/ul/li[3]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/vaults/')]", "xpath:href"],
+        ["xpath=//li[3]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Vaults')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "00dbdbbd-9c9e-4a71-bb05-9ba95b192adb",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Add Vault')]",
+      "targets": [
+        ["css=.mb-2", "css:finder"],
+        ["xpath=(//button[@type='button'])[2]", "xpath:attributes"],
+        ["xpath=//div/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Add Vault')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "2c4c8030-58bd-481e-ad8e-b6b13dbdeeef",
+      "comment": "",
+      "command": "click",
+      "target": "id=vaultName",
+      "targets": [
+        ["id=vaultName", "id"],
+        ["name=vaultName", "name"],
+        ["css=#vaultName", "css:finder"],
+        ["xpath=//input[@id='vaultName']", "xpath:attributes"],
+        ["xpath=//form[@id='addVaultForm']/div/input", "xpath:idRelative"],
+        ["xpath=//form/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "0bf1789f-c3f6-4900-8193-9ff8f13d2b45",
+      "comment": "",
+      "command": "type",
+      "target": "id=vaultName",
+      "targets": [
+        ["id=vaultName", "id"],
+        ["name=vaultName", "name"],
+        ["css=#vaultName", "css:finder"],
+        ["xpath=//input[@id='vaultName']", "xpath:attributes"],
+        ["xpath=//form[@id='addVaultForm']/div/input", "xpath:idRelative"],
+        ["xpath=//form/div/input", "xpath:position"]
+      ],
+      "value": "New Unique Vault"
+    }, {
+      "id": "627293e7-607f-4203-b1eb-6a408c358650",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[@type='submit']",
+      "targets": [
+        ["css=#addVaultForm > .btn", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//form[@id='addVaultForm']/button", "xpath:idRelative"],
+        ["xpath=//form/button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e4ef5072-382f-4ad2-93f4-44be821f6a36",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "xpath=//td[contains(.,'New Unique Vault')]",
+      "targets": [
+        ["css=tr:nth-child(5) > td:nth-child(1)", "css:finder"],
+        ["xpath=//table[@id='vaultTable']/tbody[2]/tr[5]/td", "xpath:idRelative"],
+        ["xpath=//tr[5]/td", "xpath:position"],
+        ["xpath=//td[contains(.,'New Unique Vault')]", "xpath:innerText"]
+      ],
+      "value": "30000"
+    }]
   }, {
     "id": "71fcd934-8027-4bca-81fa-fa7fcbd09332",
     "name": "userCreateAndDeleteVault",
