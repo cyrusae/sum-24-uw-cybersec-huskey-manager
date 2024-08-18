@@ -350,6 +350,132 @@
       ],
       "value": "30000"
     }]
+  }, {
+    "id": "65cc47f5-08d8-4fea-baa8-6d1702fbce63",
+    "name": "wrongPasswordExistingAccount",
+    "commands": [{
+      "id": "da6bcdb5-8261-493f-b58f-efda062ee946",
+      "comment": "",
+      "command": "open",
+      "target": "/login.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "f605d1f7-244c-410a-b683-732a26673759",
+      "comment": "",
+      "command": "type",
+      "target": "id=username",
+      "targets": [],
+      "value": "admin"
+    }, {
+      "id": "a572eac5-c8f2-4ef6-86c2-56102b2ea5b3",
+      "comment": "",
+      "command": "type",
+      "target": "id=password",
+      "targets": [
+        ["id=password", "id"],
+        ["name=password", "name"],
+        ["css=#password", "css:finder"],
+        ["xpath=//input[@id='password']", "xpath:attributes"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "wrongwrong"
+    }, {
+      "id": "e6fdeadd-7602-40ae-b744-f1d35f311998",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[@type='submit']",
+      "targets": [
+        ["css=.btn-primary", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Login')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "789fb91c-011f-4824-8e20-3cb82181da99",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "css=.alert",
+      "targets": [
+        ["css=.alert", "css:finder"],
+        ["xpath=//div/div/div", "xpath:position"]
+      ],
+      "value": "30000"
+    }, {
+      "id": "02a54399-08b5-4d52-839e-99eab9b69a87",
+      "comment": "",
+      "command": "waitForText",
+      "target": "css=.alert",
+      "targets": [],
+      "value": "Invalid username or password."
+    }]
+  }, {
+    "id": "50522ff1-bd13-4aeb-8f0d-578b6a8dd69a",
+    "name": "wrongUsernameNonexistentAccount",
+    "commands": [{
+      "id": "f9485517-b296-4c45-9aef-3feaf92ec4b8",
+      "comment": "",
+      "command": "open",
+      "target": "/login.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "2061fc78-18dc-49b3-b36f-433186c05dec",
+      "comment": "",
+      "command": "type",
+      "target": "id=username",
+      "targets": [
+        ["id=username", "id"],
+        ["name=username", "name"],
+        ["css=#username", "css:finder"],
+        ["xpath=//input[@id='username']", "xpath:attributes"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "nonono"
+    }, {
+      "id": "2d10f524-0350-442c-a09a-f75d6cb641a1",
+      "comment": "",
+      "command": "type",
+      "target": "id=password",
+      "targets": [
+        ["id=password", "id"],
+        ["name=password", "name"],
+        ["css=#password", "css:finder"],
+        ["xpath=//input[@id='password']", "xpath:attributes"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "lskjflskjdgflksdglkjsgd"
+    }, {
+      "id": "2ae58fca-1f38-4ed2-9c97-73e6ed3574f1",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[@type='submit']",
+      "targets": [
+        ["css=.btn-primary", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Login')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "eb3defeb-b0dd-4a70-b9f0-a7f26484613c",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "css=.alert",
+      "targets": [],
+      "value": "30000"
+    }, {
+      "id": "cd041396-cc1c-408f-95bb-88ca1950929a",
+      "comment": "",
+      "command": "waitForText",
+      "target": "css=.alert",
+      "targets": [
+        ["css=.alert", "css:finder"],
+        ["xpath=//div/div/div", "xpath:position"]
+      ],
+      "value": "Invalid username or password."
+    }]
   }],
   "suites": [{
     "id": "9e04261a-56ab-435d-a60f-f0bb5205c74c",
