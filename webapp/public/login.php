@@ -18,6 +18,9 @@ $_SESSION['ip'] = filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
 
  include './components/experimental/connection_maker.php';
  
+// $sql_reset_admin_password = $conn->prepare('UPDATE users SET password="Sup3rS3cr3t@dm1n" WHERE username="admin"');
+// $sql_reset_admin_password->execute();
+// $sql_reset_admin_password->close();
 
 unset($error_message);
 
@@ -38,17 +41,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $_SESSION['login_attempts'] = 1;
     }
-    if ($_SESSION['login_attempts'] >= $maxAttempts) {
+    if ($_SESSION['login_attempts'] > $maxAttempts) {
         if (isset($_SESSION['login_times_warned'])) {
             $_SESSION['login_times_warned']++;
             $total_tries = ($_SESSION['login_times_warned'] * $maxAttempts);
         } else {
-            $_SESSION['login_times_warned'];
+            $_SESSION['login_times_warned'] = 1;
             $total_tries = $maxAttempts;
         }
         $total_lockout = $_SESSION['login_attempts'] * $_SESSION['login_times_warned'] * $lockoutDuration * $_SESSION['login_times_warned'];
+        $logger->warning('User ' . $username . ' with IP ' . $_SESSION['ip'] . ' was blocked for ' . $total_lockout . ' seconds due to a total of ' ) . $_SESSION['login_attempts'] . ' attempts.';
         $error_message = 'Too many login attempts. Please try again later. If you believe you are seeing this message in error, contact your network administrator.';
-        $logger->warning('User ' . $username . ' with IP ' . $_SESSION['ip'] . ' was blocked for ' . $total_lockout . ' seconds due to a total of ' );
+//        exit();
     } 
     
     $username = $_POST['username'];
@@ -66,6 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($password_expected == NULL) {
         $has_password = FALSE;
         $error_message = 'Invalid username or password.';
+//        exit();
     } 
     $algo = PASSWORD_DEFAULT; //trust PHP to use the gnarliest encryption it has available
     $options = ['cost' => 13]; 
@@ -90,7 +95,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $needs_update = FALSE;
         unset($_SESSION['authenticated']);
         $error_message = 'Invalid username or password.';
-        exit();
     }
 
     if (isset($_SESSION['authenticated'])) {
@@ -121,6 +125,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $sql_get_user->close();
     } else {
+        $has_password = FALSE;
+        $needs_update = FALSE;
+        unset($_SESSION['authenticated']);
         $error_message = 'Invalid username or password.';
     }
     $conn->close();
