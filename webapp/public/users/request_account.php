@@ -18,17 +18,41 @@ if ($conn->connect_error) {
     $logger->error($errorMessage);
     die($errorMessage);
 }
+$limitAccountRequestsTo = 1;
+$waitBeforeAllowingNewAccount = 600;
 //TODO log number of account creation attempts (form submissions)
 //TODO throttle account creation 
 //TODO limit account name collisions (need a message reflecting it)
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_SESSION['hasRequestedAccount'] !== true) {
-    
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_SESSION['hasRequestedAccount'])) {
+        $_SESSION['hasRequestedAccount']++;
+    } else {
+        $_SESSION['hasRequestedAccount'] = 1;
+        $_SESSION['accountRequestMade'] = time();
+    }
+
+    if ($_SESSION['hasRequestedAccount'] > $limitAccountRequestsTo) {
+        $currentTime = time();
+        $timeSinceLastAttempt = $currentTime - $_SESSION['accountRequestMade'];
+        if ($timeSinceLastAttempt < $waitBeforeAllowingNewAccount) {
+            $error_message('You have already requested an account. If you believe you are seeing this message in error, contact your network administrator.');
+            $logger->warning('Additional account requests prevented due to being #' . $_SESSION['hasRequestedAccount'] . ' from this user in the past ' . $timeSinceLastAttempt . ' seconds.');
+            exit();
+        } else {
+            $logger->notice('This user has made ' . $_SESSION['hasRequestedAccount'] . ' account requests, but is following timeout rules.');
+            $_SESSION['accountRequestMade'] = $currentTime;
+        }
+    }
+
+    $algo = PASSWORD_DEFAULT;
+    $options = ['cost' => 13];
     
     $username = mysqli_real_escape_string($conn, $_POST['username']);
-    $password = mysqli_real_escape_string($conn, $_POST['password']);
+    $password = password_hash($_POST['password'], $algo, $options);
     $firstName = mysqli_real_escape_string($conn, $_POST['first_name']);
     $lastName = mysqli_real_escape_string($conn, $_POST['last_name']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
+
 
 
     
@@ -38,18 +62,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_SESSION['hasRequestedAccount'] !=
 
 
     if ($conn->query($sql) === TRUE) {
-            if ($_SESSION['hasRequestedAccount'] === true) {
-                $_SESSION['attemptedAccountRequests']++;
-                //TODO: Cut off repeated requests and block user instead of just spawning more of this
-                $logger->notice('Duplicate account creation attempted. Username: ' . $username . '. Attempt #' . $_SESSION['attemptedAccountRequests']);
-                die('You have already requested an account. If you believe this message to be in error, contact your network administrator.');
-            } else {
-                header("Location: /login.php");
-                $logger->notice('New account created for ' . $username);
-                $_SESSION['hasRequestedAccount'] = true;
-                $_SESSION['attemptedAccountRequests'] = 1;
-                exit();
-        }
+        $logger->notice('Account creation request received for user ' . $username . ' made by ' . $firstName . ' ' . $lastName);
+        header("Location: /login.php");
+        exit();
     } else {
         $error_message = 'Error creating account: ' . $conn->error;
         $logger->error($error_message);
@@ -93,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_SESSION['hasRequestedAccount'] !=
                 </div>
                 <div class="form-group">
                     <label for="username">Username:</label>
-                    <input type="text" class="form-control" id="username" name="username" required>
+                    <input type="text" class="form-control" id="username" name="username" pattern="\w" required>
                 </div>
                 <div class="form-group">
                     <label for="password">Password:</label>
