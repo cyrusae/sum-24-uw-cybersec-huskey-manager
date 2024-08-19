@@ -394,7 +394,7 @@
       "command": "type",
       "target": "id=username",
       "targets": [],
-      "value": "admin"
+      "value": "username"
     }, {
       "id": "a572eac5-c8f2-4ef6-86c2-56102b2ea5b3",
       "comment": "",
@@ -896,6 +896,105 @@
     "id": "da16fe08-1203-4582-a2c1-ed05f070860a",
     "name": "timeoutLoginPage",
     "commands": []
+  }, {
+    "id": "ab98c0de-b83c-46ac-983e-800fb0fd9717",
+    "name": "preventUsernameSQLInjection",
+    "commands": [{
+      "id": "154b0938-60d2-4722-a5f2-ba9f6694b1d6",
+      "comment": "",
+      "command": "open",
+      "target": "/logout.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "8bd5d5ea-f275-4a66-a770-bf4c13c21bb0",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "517x353",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "4c15193f-dcfc-4835-beb0-e6baeb8bf973",
+      "comment": "",
+      "command": "click",
+      "target": "id=username",
+      "targets": [
+        ["id=username", "id"],
+        ["name=username", "name"],
+        ["css=#username", "css:finder"],
+        ["xpath=//input[@id='username']", "xpath:attributes"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "714d10ec-663f-4a49-b99e-37b5c4e9057c",
+      "comment": "",
+      "command": "type",
+      "target": "id=username",
+      "targets": [
+        ["id=username", "id"],
+        ["name=username", "name"],
+        ["css=#username", "css:finder"],
+        ["xpath=//input[@id='username']", "xpath:attributes"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "' OR 1=1; --"
+    }, {
+      "id": "40d5bb95-359f-4017-a13b-e46a6eee0a01",
+      "comment": "",
+      "command": "click",
+      "target": "id=password",
+      "targets": [
+        ["id=password", "id"],
+        ["name=password", "name"],
+        ["css=#password", "css:finder"],
+        ["xpath=//input[@id='password']", "xpath:attributes"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "ab59add2-6d87-4ef7-9d40-25ad7a439c83",
+      "comment": "",
+      "command": "type",
+      "target": "id=password",
+      "targets": [
+        ["id=password", "id"],
+        ["name=password", "name"],
+        ["css=#password", "css:finder"],
+        ["xpath=//input[@id='password']", "xpath:attributes"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "asdfsadgaadg"
+    }, {
+      "id": "34c43415-3d02-4f69-889d-e2a6cd8aa5a5",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[@type='submit']",
+      "targets": [
+        ["css=.btn-primary", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Login')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "cfe499dc-c747-46cf-a407-4f842b6d9f97",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "css=.alert",
+      "targets": [],
+      "value": "30000"
+    }, {
+      "id": "e497aaca-8590-4415-a6d2-f75da7faa991",
+      "comment": "",
+      "command": "waitForText",
+      "target": "css=.alert",
+      "targets": [
+        ["css=.alert", "css:finder"],
+        ["xpath=//div/div/div", "xpath:position"]
+      ],
+      "value": "Invalid username or password."
+    }]
   }],
   "suites": [{
     "id": "9e04261a-56ab-435d-a60f-f0bb5205c74c",
@@ -917,14 +1016,14 @@
     "persistSession": false,
     "parallel": false,
     "timeout": 300,
-    "tests": ["ccee42f7-f91a-465d-971f-48b1ac3cf4d0", "65cc47f5-08d8-4fea-baa8-6d1702fbce63", "50522ff1-bd13-4aeb-8f0d-578b6a8dd69a"]
+    "tests": ["ccee42f7-f91a-465d-971f-48b1ac3cf4d0", "65cc47f5-08d8-4fea-baa8-6d1702fbce63", "50522ff1-bd13-4aeb-8f0d-578b6a8dd69a", "ab98c0de-b83c-46ac-983e-800fb0fd9717"]
   }, {
     "id": "9f73242a-d57d-481d-baa0-0df4a5fd2e19",
     "name": "UsualUsersUsage",
     "persistSession": false,
     "parallel": false,
     "timeout": 300,
-    "tests": ["ccee42f7-f91a-465d-971f-48b1ac3cf4d0", "66e3572a-0839-4a4e-a752-c68c936f6917", "eded2f11-09aa-4758-bff7-53bbf5456dd9"]
+    "tests": ["ccee42f7-f91a-465d-971f-48b1ac3cf4d0", "66e3572a-0839-4a4e-a752-c68c936f6917", "eded2f11-09aa-4758-bff7-53bbf5456dd9", "db25dc0e-b71c-4317-8514-19d39cb41dc4"]
   }, {
     "id": "e745317d-fd0a-4ae7-b478-9aae4cb15896",
     "name": "TODO",
