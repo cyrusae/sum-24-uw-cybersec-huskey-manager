@@ -3,6 +3,7 @@ session_start();
 
 include '../components/loggly-logger.php';
 include '../components/authenticate.php';
+//include '../components/authorization.php'; //VERIFY THIS IS ADDED APPROPRIATELY
 
 $hostname = 'backend-mysql-database';
 $username = 'user';
@@ -43,7 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $logger->error($errorMessage);
                 die($errorMessage);
             }
-
             // Redirect to the current page after managing the relationship
             header("Location: {$_SERVER['PHP_SELF']}?vault_id=$vaultId");
             exit();

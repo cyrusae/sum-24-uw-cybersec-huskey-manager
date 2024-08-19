@@ -2,7 +2,7 @@
 
 include '../components/authenticate.php';
 include '../components/loggly-logger.php';
-
+//include '../components/authorization.php'; //VERIFY THIS IS ADDED APPROPRIATELY
 
 $hostname = 'backend-mysql-database';
 $username = 'user';

@@ -1,5 +1,5 @@
 <?php
-session_start();
+//session_start();
 
 // Check if the user has the necessary permissions for a specific operation on a vault
 function hasPermission($operation, $vaultId) {

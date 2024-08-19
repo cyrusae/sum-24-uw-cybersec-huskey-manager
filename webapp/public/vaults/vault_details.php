@@ -3,6 +3,7 @@ session_start();
 
 include '../components/loggly-logger.php';
 include '../components/authenticate.php';
+//include '../components/authorization.php'; //VERIFY THIS IS ADDED APPROPRIATELY
 
 
 // Replace with your database connection details
@@ -111,6 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset ($_POST['editPasswordId']) &&
         $filePathSQL = "'" . $filePath . "'";
     }
 
+    //TODO Paramteterize 
     $queryEditPassword = "UPDATE vault_passwords 
                         SET username = '$editUsername', website = '$editWebsite', 
                         password = '$editPassword', notes = '$editNotes', file_path = $filePathSQL
@@ -134,6 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset ($_POST['deletePasswordId']) 
     $deletePasswordId = $_POST['deletePasswordId'];
     $vaultId = $_POST['vaultId'];
 
+    //TODO Paramteterize 
     $queryDeletePassword = "DELETE FROM vault_passwords WHERE password_id = $deletePasswordId";
     $resultDeletePassword = $conn->query($queryDeletePassword);
 
@@ -171,6 +174,7 @@ if (isset ($_GET['searchQuery']) && !empty ($_GET['searchQuery'])) {
             WHERE vault_id = $vaultId
             AND (vault_passwords.username LIKE '%$searchQuery%' OR vault_passwords.website LIKE '%$searchQuery%')";
 }
+//TODO Paramteterize 
 
 // Retrieve passwords for the vault
 
@@ -180,6 +184,7 @@ if (!$resultPasswords) {
     die ("Query failed: " . $conn->error);
 }
 
+    //TODO Paramteterize 
 $queryVaultOwner = "SELECT *
                     FROM vault_permissions, users
                     WHERE vault_permissions.vault_id = $vaultId
